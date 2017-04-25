@@ -11,7 +11,6 @@ d3.csv("pokeSTATS.csv", function(loadedData){
     createListeners(); //had to add listeners programatically to programatically created objects
 });
 
-<<<<<<< HEAD
 function createListeners(){
     //add pokemon from dropdown list to selected pokemon
     d3.select("#AddPoke").on('click', function() {
@@ -76,10 +75,6 @@ function createDD(dat){
 
 //loads pics of selected pokemon into grid
 function LoadPics(dat){
-=======
-//display all pokemon on page
-function doStuffwithData(){
->>>>>>> origin/master
     var w = 1000; //w of svg
     var h = 2000; //h of svg
     d3.select('svg').remove();
