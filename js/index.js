@@ -1,11 +1,12 @@
 var dataset;
 
+//read csv of pokemon stats, types, and gifs
 d3.csv("pokeSTATS.csv", function(loadedData){
     dataset = loadedData;
     doStuffwithData();
 })
 
-
+//display all pokemon on page
 function doStuffwithData(){
     var w = 1000; //w of svg
     var h = 10000; //h of svg
