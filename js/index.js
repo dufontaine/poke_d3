@@ -2,6 +2,7 @@ var dataset; //entire csv
 var filteredData; //only rows of selected Pokemon
 var SelectedPokes = [0,3,6,-1,-1,-1]; //numbers are pokemon index in data (Pokemon Number - 1)
 
+//read csv of pokemon stats, types, and gifs
 d3.csv("pokeSTATS.csv", function(loadedData){
     dataset = loadedData;
     createDD(dataset); //create dropdown
@@ -10,6 +11,7 @@ d3.csv("pokeSTATS.csv", function(loadedData){
     createListeners(); //had to add listeners programatically to programatically created objects
 });
 
+<<<<<<< HEAD
 function createListeners(){
     //add pokemon from dropdown list to selected pokemon
     d3.select("#AddPoke").on('click', function() {
@@ -74,6 +76,10 @@ function createDD(dat){
 
 //loads pics of selected pokemon into grid
 function LoadPics(dat){
+=======
+//display all pokemon on page
+function doStuffwithData(){
+>>>>>>> origin/master
     var w = 1000; //w of svg
     var h = 2000; //h of svg
     d3.select('svg').remove();
