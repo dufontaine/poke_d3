@@ -1,0 +1,28 @@
+
+#AddPoke{
+  border-radius: 10px; 
+  display: inline-block;
+  cursor: pointer;
+  color: rgb(255, 255, 255);
+  font-family: Arial;
+  font-size: 16px;
+  padding: 5px 5px 5px 5px;
+  text-decoration: none;
+  text-shadow: rgb(47, 102, 39) 0px 1px 0px;
+  margin: 0 5px 0px 5px;
+  background-color: rgb(68, 199, 103); 
+  border: 1px solid black;
+}
+
+.PokeBox{
+    display: inline-block;
+    stroke-width:1;
+    stroke:rgb(0,0,0);
+}
+
+#myDD{
+    display: inline-block;
+}
+svg {
+    display: block;
+}
