@@ -1,19 +1,20 @@
 var dataset; //entire csv
 var filteredData; //only rows of selected Pokemon
-var SelectedPokes = [0,3,6,-1,-1,-1]; //numbers are pokemon index in data (Pokemon Number - 1)
+var SelectedPokes = [0, 3, 6, -1, -1, -1]; //numbers are pokemon index in data (Pokemon Number - 1)
 
 //read csv of pokemon stats, types, and gifs
-d3.csv("pokeSTATS.csv", function(loadedData){
+d3.csv("pokeSTATS.csv", function(loadedData) {
     dataset = loadedData;
+    console.log(rowToJSON(dataset[1]));
     createDD(dataset); //create dropdown
     filteredData = filterPokes(dataset, SelectedPokes);
     LoadPics(filteredData);
     createListeners(); //had to add listeners programatically to programatically created objects
 });
 
-function createListeners(){
+function createListeners() {
     //add pokemon from dropdown list to selected pokemon
-    d3.select("#AddPoke").on('click', function() {
+    d3.select("#AddPoke").on('click', function () {
         selPoke = parseInt(d3.select("#myDD").node().value);
         for (var i = 0; i < 6; i++) {
             if (SelectedPokes.indexOf(selPoke)>-1){
@@ -61,7 +62,8 @@ function filterPokes(myData, sP) {
 
 //creates drop-down list
 function createDD(dat){
-    d3.select("body").append("select").attr('id','myDD')
+    console.log(dat);
+    d3.select("#myDD")
     .selectAll("option")
     .data(dat)
     .enter()
@@ -75,11 +77,12 @@ function createDD(dat){
 
 //loads pics of selected pokemon into grid
 function LoadPics(dat){
-    var w = 1000; //w of svg
-    var h = 2000; //h of svg
-    d3.select('svg').remove();
-    var svg = d3.select('body') //make new svg 'canvas'
+    var w = 150; //w of svg
+    var h = 200; //h of svg
+    d3.select('#poke_grid').remove();
+    var svg = d3.select('#cell_AddPoke') //make new svg 'canvas'
       .append('svg')
+      .attr('id', 'poke_grid')
       .attr('width',w)
       .attr('height',h);
 
@@ -121,4 +124,32 @@ function LoadPics(dat){
       .attr("fill", function(d){
      return "url(#" + d.Pokemon+ ")"; 
     })
+}
+
+function rowToJSON (row) {
+    var OUTPUT = new Object();
+    var axes_list = [];
+    var ax1 = new Object();
+    var ax2 = new Object();
+    var ax3 = new Object();
+    var ax4 = new Object();
+    var ax5 = new Object();
+    ax1.axis = 'HP';
+    ax2.axis = 'Attack';
+    ax3.axis = 'Defense';
+    ax4.axis = 'Speed';
+    ax5.axis = 'Special';
+    ax1.value = row.HP;
+    ax2.value = row.Attack;
+    ax3.value = row.Defense;
+    ax4.value = row.Speed;
+    ax5.value = row.Special;
+    axes_list.push(ax1);
+    axes_list.push(ax2);
+    axes_list.push(ax3);
+    axes_list.push(ax4);
+    axes_list.push(ax5);
+    OUTPUT.className = 'test_class';
+    OUTPUT.axes = axes_list;
+    return OUTPUT;
 }
