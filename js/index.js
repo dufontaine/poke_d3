@@ -1,38 +1,40 @@
 var dataset; //entire csv
 var filteredData; //only rows of selected Pokemon
 var SelectedPokes = [0, 3, 6, -1, -1, -1]; //numbers are pokemon index in data (Pokemon Number - 1)
+var radarData = [];
 
 //read csv of pokemon stats, types, and gifs
 d3.csv("pokeSTATS.csv", function(loadedData) {
     dataset = loadedData;
-    console.log(rowToJSON(dataset[1]));
+    //console.log(rowToJSON(dataset[1]));
     createDD(dataset); //create dropdown
     filteredData = filterPokes(dataset, SelectedPokes);
     LoadPics(filteredData);
     createListeners(); //had to add listeners programatically to programatically created objects
+    makeRadar(filteredData);
 });
 
 function createListeners() {
     //add pokemon from dropdown list to selected pokemon
     d3.select("#AddPoke").on('click', function () {
         selPoke = parseInt(d3.select("#myDD").node().value);
-        for (var i = 0; i < 6; i++) {
+        for (i = 0; i < 6; i++) {
             if (SelectedPokes.indexOf(selPoke)>-1){
                 i=999;
             } else if (SelectedPokes[i]==-1) {
                 SelectedPokes[i] = selPoke;
                 i = 999;
             };
-            filteredData = filterPokes(dataset,SelectedPokes);
-            LoadPics(filteredData);
-            createListeners();
-        }   
+        }  
+        filteredData = filterPokes(dataset,SelectedPokes);
+        LoadPics(filteredData);
+        createListeners();
+        makeRadar(filteredData);
     });
     
     //double click on pokemon to remove from selected
-    d3.select('svg').selectAll('rect.PokeBox').on('dblclick', function(){
+    d3.select('#poke_grid').selectAll('rect.PokeBox').on('dblclick', function(){
         myObj = d3.select(this);
-        console.log(SelectedPokes);
         x = parseInt(myObj.attr('pIndex'));
         pokeIndex = SelectedPokes.indexOf(x);
         if (pokeIndex>-1){
@@ -42,6 +44,7 @@ function createListeners() {
         filteredData = filterPokes(dataset,SelectedPokes);
         LoadPics(filteredData);
         createListeners();
+        makeRadar(filteredData);
     });  
 };
 
@@ -62,7 +65,6 @@ function filterPokes(myData, sP) {
 
 //creates drop-down list
 function createDD(dat){
-    console.log(dat);
     d3.select("#myDD")
     .selectAll("option")
     .data(dat)
@@ -126,30 +128,48 @@ function LoadPics(dat){
     })
 }
 
+
+//converts a row from the csv data to json format for radar chart
 function rowToJSON (row) {
     var OUTPUT = new Object();
     var axes_list = [];
-    var ax1 = new Object();
-    var ax2 = new Object();
-    var ax3 = new Object();
-    var ax4 = new Object();
-    var ax5 = new Object();
-    ax1.axis = 'HP';
-    ax2.axis = 'Attack';
-    ax3.axis = 'Defense';
-    ax4.axis = 'Speed';
-    ax5.axis = 'Special';
-    ax1.value = row.HP;
-    ax2.value = row.Attack;
-    ax3.value = row.Defense;
-    ax4.value = row.Speed;
-    ax5.value = row.Special;
-    axes_list.push(ax1);
-    axes_list.push(ax2);
-    axes_list.push(ax3);
-    axes_list.push(ax4);
-    axes_list.push(ax5);
-    OUTPUT.className = 'test_class';
+    var ax1 = new Object();  var ax2 = new Object();  var ax3 = new Object();
+    var ax4 = new Object();  var ax5 = new Object();
+    ax1.axis = 'HP';  ax2.axis = 'Attack';  ax3.axis = 'Defense'; 
+    ax4.axis = 'Speed';  ax5.axis = 'Special';
+    ax1.value = row.HP/250*100; ax2.value = row.Attack/134*100; ax3.value = row.Defense/180*100; 
+    ax4.value = row.Speed/140*100; ax5.value = row.Special/154*100;
+    axes_list.push(ax1);  axes_list.push(ax2);  axes_list.push(ax3);
+    axes_list.push(ax4);  axes_list.push(ax5);
+    OUTPUT.className = row.Pokemon;
     OUTPUT.axes = axes_list;
     return OUTPUT;
 }
+
+
+function makeRadar (myData) {
+    //remove existing radar chart
+    d3.select('#radarSVG').remove();
+    //gather data for radar chart
+    var radarData = [];
+    for (i=0; i<myData.length; i++) {
+        radarData.push(rowToJSON(myData[i]));
+    }
+    //set up configuration for radar chart
+    RadarChart.defaultConfig.color = function() {};
+    RadarChart.defaultConfig.radius = 3;
+    RadarChart.defaultConfig.w = 400;
+    RadarChart.defaultConfig.h = 400;
+    RadarChart.defaultConfig.maxValue = 100;
+    //create radar chart
+    var chart = RadarChart.chart();
+    var cfg = chart.config(); // retrieve default config
+    var svg = d3.select('#cell_Radar').append('svg')
+        .attr('width', cfg.w + cfg.w + 50)
+        .attr('height', cfg.h + cfg.h / 4)
+        .attr('id','radarSVG');
+    svg.append('g').classed('single', 1).datum(radarData).call(chart);
+    render();
+}
+
+
