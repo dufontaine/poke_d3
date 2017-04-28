@@ -1,6 +1,6 @@
 var dataset; //entire csv
 var filteredData; //only rows of selected Pokemon
-var SelectedPokes = [0, 3, 6, -1, -1, -1]; //numbers are pokemon index in data (Pokemon Number - 1)
+var SelectedPokes = [1, 4, 7, -1, -1, -1]; //numbers are pokemon index in data (Pokemon Number - 1)
 var radarData = [];
 
 //read csv of pokemon stats, types, and gifs
@@ -52,8 +52,8 @@ function createListeners() {
 //if not all 6 are selected, a row called pokeball is selected with image of a pokeball
 function filterPokes(myData, sP) {
     var result = [];
-    myData.forEach(function(d,i){
-        if(sP.indexOf(i) > -1){
+    myData.forEach(function(d){
+        if(sP.indexOf(parseInt(d.Number)) > -1){
             result.push(d);
         }
     })
@@ -67,12 +67,12 @@ function filterPokes(myData, sP) {
 function createDD(dat){
     d3.select("#myDD")
     .selectAll("option")
-    .data(dat)
+    .data(dat.sort(function(a,b) {return (a.Pokemon > b.Pokemon) ? 1 : ((b.Pokemon > a.Pokemon) ? -1 : 0);} ))
     .enter()
     .append("option")
-    .attr("value", function(d,i) {return i;})
-    .text(function(d,i) {
-        return (i+1) + " - " + d.Pokemon; 
+    .attr("value", function(d) {return parseInt(d.Number);})
+    .text(function(d) {
+        return d.Pokemon; 
     });
     return 0;
 }
@@ -116,7 +116,7 @@ function LoadPics(dat){
       .enter()
       .append('rect')
       .attr('class','PokeBox')
-      .attr('pIndex', function(d){return d.Number-1})
+      .attr('pIndex', function(d){return parseInt(d.Number)})
       .attr("x", function(d,i){
       return (i% grid.cols)*max.x;
     }).attr("y", function(d,i){
@@ -141,8 +141,9 @@ function rowToJSON (row) {
     ax4.value = row.Speed/140*100; ax5.value = row.Special/154*100;
     axes_list.push(ax1);  axes_list.push(ax2);  axes_list.push(ax3);
     axes_list.push(ax4);  axes_list.push(ax5);
-    OUTPUT.className = row.Pokemon;
+    OUTPUT.className = row['Type 1'];
     OUTPUT.axes = axes_list;
+    OUTPUT.Pokemon = row.Pokemon;
     return OUTPUT;
 }
 
@@ -161,6 +162,9 @@ function makeRadar (myData) {
     RadarChart.defaultConfig.w = 400;
     RadarChart.defaultConfig.h = 400;
     RadarChart.defaultConfig.maxValue = 100;
+    RadarChart.defaultConfig.levels = 4;
+    RadarChart.defaultConfig.circles=true;
+    
     //create radar chart
     var chart = RadarChart.chart();
     var cfg = chart.config(); // retrieve default config

@@ -28,3 +28,60 @@ svg {
     display: block;
     border: 1px solid black;
 }
+
+/*Pokemon Type colors */
+.Fire{
+    fill: #F08030;
+}
+
+.Water{
+    fill: #6890F0;
+}
+
+.Grass{
+    fill: #78C850;
+}
+
+.Bug{
+    fill: #A8B820;
+}
+
+.Normal{
+    fill: #A8A878;
+}
+
+.Poison{
+    fill: #A040A0;
+}
+
+.Electric{
+    fill: #F8D030;
+}
+
+.Ground{
+    fill: #E0C068;
+}
+
+.Fighting{
+    fill: #C03028;
+}
+
+.Psychic{
+    fill: #F85888;
+}
+
+.Rock{
+    fill: #B8A038;
+}
+
+.Ghost{
+    fill: #705898;
+}
+
+.Ice{
+    fill: #98D8D8;
+}
+
+.Dragon{
+    fill: #7038F8;
+}
