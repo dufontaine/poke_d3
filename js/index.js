@@ -15,6 +15,37 @@ d3.csv("pokeSTATS.csv", function(loadedData) {
 });
 
 function createListeners() {
+    //update single image of pokemon based on DD
+    d3.select('#myDD').on('change', function(){
+    
+        var svg = d3.select('#one_Poke_pic') //make new svg 'canvas'
+        // define background patterns
+        // identified by id=PokemonName
+        svg.selectAll('defs')
+          .data(dataset)
+          .enter()
+          .append('defs')
+            .append("pattern")
+            .attr("id", function(d){
+                return d.Pokemon;
+        }).attr('patternUnits', 'userSpaceOnUse')
+            .attr("width", 75)
+            .attr("height", 75)
+            .append("image")
+            .attr("xlink:href", function(d){
+                return d.PNG;
+        }).attr("width", 75)
+          .attr("height", 75);
+        
+        svg.selectAll('rect')
+          .attr("fill", function(){
+            var sel = document.getElementById('myDD')
+            return "url(#" + sel.options[sel.selectedIndex].text+ ")"; 
+        })        
+        
+    });
+
+         
     //add pokemon from dropdown list to selected pokemon
     d3.select("#AddPoke").on('click', function () {
         selPoke = parseInt(d3.select("#myDD").node().value);
@@ -79,17 +110,17 @@ function createDD(dat){
 
 //loads pics of selected pokemon into grid
 function LoadPics(dat){
-    var w = 150; //w of svg
-    var h = 200; //h of svg
+    var grid = {rows: 3, cols: 2}; //dim of array of pokemon.(only cols matters)
+    var max = { x: 60, y: 60}; //size of pokemon images
+    
+    var w = grid.cols * max.x; //w of svg
+    var h = grid.rows * max.y; //h of svg
     d3.select('#poke_grid').remove();
     var svg = d3.select('#cell_AddPoke') //make new svg 'canvas'
       .append('svg')
       .attr('id', 'poke_grid')
       .attr('width',w)
       .attr('height',h);
-
-    var grid = {rows: 3, cols: 2}; //dim of array of pokemon.(only cols matters)
-    var max = { x: 50, y: 50}; //size of pokemon images
 
     // define background patterns
     // identified by id=PokemonName
@@ -106,9 +137,8 @@ function LoadPics(dat){
         .append("image")
         .attr("xlink:href", function(d){
       return d.GIF;
-    })
-        .attr("width", max.x)
-        .attr("height", max.y);
+    }).attr("width", max.x)
+      .attr("height", max.y);
 
     //add rectangles that contain pokemon image
     svg.selectAll('rect')
@@ -175,5 +205,3 @@ function makeRadar (myData) {
     svg.append('g').classed('single', 1).datum(radarData).call(chart);
     render();
 }
-
-

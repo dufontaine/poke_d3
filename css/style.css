@@ -9,9 +9,20 @@
   padding: 5px 5px 5px 5px;
   text-decoration: none;
   text-shadow: rgb(47, 102, 39) 0px 1px 0px;
-  margin: 0 5px 0px 5px;
+  margin: 5px 5px 5px 5px;
   background-color: rgb(68, 199, 103); 
   border: 1px solid black;
+}
+
+#one_Poke{
+      margin: 5px 5px 5px 5px;
+  display: block;
+  color: rgb(255, 255, 255);
+  font-family: Arial;
+  font-size: 16px;
+  background-color: rgb(68, 199, 103); 
+  width: 200px;
+  height: 250px;
 }
 
 .PokeBox{
@@ -25,6 +36,7 @@
 }
 
 svg {
+    margin: 5px 5px 5px 5px;
     display: block;
     border: 1px solid black;
 }
