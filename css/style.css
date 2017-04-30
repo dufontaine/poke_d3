@@ -15,14 +15,30 @@
 }
 
 #one_Poke{
-      margin: 5px 5px 5px 5px;
-  display: block;
+  margin: 5px 5px 5px 5px;
+  display: inline-block;
   color: rgb(255, 255, 255);
   font-family: Arial;
   font-size: 16px;
-  background-color: rgb(68, 199, 103); 
-  width: 200px;
-  height: 250px;
+  background-color: rgb(165, 165, 165); 
+  width: 250px;
+  height: 350px;
+  border: solid black; 
+}
+
+#one_Poke_pic{
+    margin: 5px 0px 5px 46px;
+    display: inline-block;
+    background: #d7dbde;
+}
+
+#pokeDescription{
+    margin: 5px 5px 5px 5px;
+    display: inline-block;
+    font-size:8px;
+    color: black;
+    font-family: "Pokemon GB";
+
 }
 
 .PokeBox{
@@ -33,6 +49,15 @@
 
 #myDD{
     display: inline-block;
+    margin: 5px 0px 0px 46px;
+    width: 150px;
+}
+
+
+
+@font-face {
+    font-family: "Pokemon GB";
+    src: url("/fonts/Pokemon GB.ttf") format('truetype');
 }
 
 svg {
@@ -97,3 +122,121 @@ svg {
 .Dragon{
     fill: #7038F8;
 }
+
+
+/*Bar Chart Styles______________________________________________________*/
+/* Regular Styles */
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: #4e555f;
+  font-size: 14px;
+}
+/* Bar Delays Animation Function */
+/* Chart Styles */
+.chart-wrap {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 10px;
+}
+.chart-wrap .chart-title {
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-family: 'Pokemon GB';
+  text-align: center;
+  color: black;
+}
+.chart-wrap .row {
+  position: relative;
+  height: 10px;
+  margin-bottom: 5px;
+}
+.chart-wrap .bar-wrap {
+  position: relative;
+  background: #d7dbde;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.chart-wrap .bar-wrap .bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgb(66, 134, 244);
+  transition: all 1s;
+  transform: translateX(-100%);
+}
+.chart-wrap .bar-wrap .bar.in {
+  transform: translateX(0%);
+  width: 50%; /*//////////////////////////*/
+}
+.chart-wrap .row:nth-of-type(1) .bar {
+  transition: 1s 400ms;
+}
+.chart-wrap .row:nth-of-type(2) .bar {
+  transition: 1s 600ms;
+}
+.chart-wrap .row:nth-of-type(3) .bar {
+  transition: 1s 800ms;
+}
+.chart-wrap .row:nth-of-type(4) .bar {
+  transition: 1s 1000ms;
+}
+.chart-wrap .row:nth-of-type(5) .bar {
+  transition: 1s 1200ms;
+}
+.chart-wrap .label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  padding-left: 5px;
+  text-align: left;
+  font-size: 8px;
+  line-height: 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+  z-index: 10;
+  color: black;
+  font-family: 'Pokemon GB';
+}
+.chart-wrap .number {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  padding-right: 10px;
+  font-size: 8px;
+  line-height: 10px;
+  font-weight: bold;
+  text-align: right;
+  z-index: 10;
+  color: black;
+  font-family: 'Pokemon GB';
+}
+@media screen and (min-width: 800px) {
+  .chart-wrap .row {
+    padding: 0 40px 0 60px;
+  }
+  .chart-wrap .label {
+    text-align: right;
+    padding-left: 0;
+  }
+  .chart-wrap .number {
+    text-align: left;
+    padding-right: 0;
+  }
+}
+/*_________________________________________________________*/
+
+
+

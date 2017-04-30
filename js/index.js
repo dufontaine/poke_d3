@@ -15,9 +15,38 @@ d3.csv("pokeSTATS.csv", function(loadedData) {
 });
 
 function createListeners() {
+    
     //update single image of pokemon based on DD
     d3.select('#myDD').on('change', function(){
-    
+        //get stats and description
+        var selPokeNumber = parseInt(d3.select("#myDD").node().value)
+        for (i=1; i<=151; i++) {
+            if (dataset[i-1].Number== selPokeNumber) {
+                var selPoke = dataset[i-1];
+                var myHP = Math.ceil(selPoke.HP / 250 * 100);
+                var myAttack = Math.ceil(selPoke.Attack / 134 * 100);
+                var myDefense = Math.ceil(selPoke.Defense / 180 * 100);
+                var mySpeed = Math.ceil(selPoke.Speed / 140 * 100);
+                var mySpecial = Math.ceil(selPoke.Special / 154 * 100);
+                var myDescription = selPoke.Description;
+                document.getElementById('pokeDescription').innerHTML = myDescription;
+                d3.select('#bar_HP').attr('data-value',myHP);
+                d3.select('#bar_Attack').attr('data-value',myAttack);
+                d3.select('#bar_Defense').attr('data-value',myDefense);
+                d3.select('#bar_Speed').attr('data-value',mySpeed);
+                d3.select('#bar_Special').attr('data-value',mySpecial);
+                document.getElementById('num_HP').innerHTML = myHP;
+                document.getElementById('num_Attack').innerHTML = myAttack;
+                document.getElementById('num_Defense').innerHTML = myDefense;
+                document.getElementById('num_Speed').innerHTML = mySpeed;
+                document.getElementById('num_Special').innerHTML = mySpecial;
+
+                //d3.select('#bar_HP').style('width',myHP + 'px');
+                generateBarGraph('#dashboard-stats');
+            }
+        }
+        console.log(myDescription);
+        
         var svg = d3.select('#one_Poke_pic') //make new svg 'canvas'
         // define background patterns
         // identified by id=PokemonName
@@ -27,20 +56,20 @@ function createListeners() {
           .append('defs')
             .append("pattern")
             .attr("id", function(d){
-                return d.Pokemon;
+                return 'png' + d.Pokemon;
         }).attr('patternUnits', 'userSpaceOnUse')
-            .attr("width", 75)
-            .attr("height", 75)
+            .attr("width", 150)
+            .attr("height", 150)
             .append("image")
             .attr("xlink:href", function(d){
                 return d.PNG;
-        }).attr("width", 75)
-          .attr("height", 75);
+        }).attr("width", 150)
+          .attr("height", 150);
         
         svg.selectAll('rect')
           .attr("fill", function(){
             var sel = document.getElementById('myDD')
-            return "url(#" + sel.options[sel.selectedIndex].text+ ")"; 
+            return "url(#png" + sel.options[sel.selectedIndex].text+ ")"; 
         })        
         
     });
@@ -110,7 +139,7 @@ function createDD(dat){
 
 //loads pics of selected pokemon into grid
 function LoadPics(dat){
-    var grid = {rows: 3, cols: 2}; //dim of array of pokemon.(only cols matters)
+    var grid = {rows: 2, cols: 3}; //dim of array of pokemon.(only cols matters)
     var max = { x: 60, y: 60}; //size of pokemon images
     
     var w = grid.cols * max.x; //w of svg
@@ -167,8 +196,9 @@ function rowToJSON (row) {
     var ax4 = new Object();  var ax5 = new Object();
     ax1.axis = 'HP';  ax2.axis = 'Attack';  ax3.axis = 'Defense'; 
     ax4.axis = 'Speed';  ax5.axis = 'Special';
-    ax1.value = row.HP/250*100; ax2.value = row.Attack/134*100; ax3.value = row.Defense/180*100; 
-    ax4.value = row.Speed/140*100; ax5.value = row.Special/154*100;
+    ax1.value = Math.ceil(row.HP/250*100); ax2.value = Math.ceil(row.Attack/134*100); 
+    ax3.value = Math.ceil(row.Defense/180*100); ax4.value = Math.ceil(row.Speed/140*100); 
+    ax5.value = Math.ceil(row.Special/154*100);
     axes_list.push(ax1);  axes_list.push(ax2);  axes_list.push(ax3);
     axes_list.push(ax4);  axes_list.push(ax5);
     OUTPUT.className = row['Type 1'];
@@ -203,5 +233,51 @@ function makeRadar (myData) {
         .attr('height', cfg.h + cfg.h / 4)
         .attr('id','radarSVG');
     svg.append('g').classed('single', 1).datum(radarData).call(chart);
-    render();
+    //render();
 }
+
+//Bar Chart Code ____________________________________________________________
+//(function($) {
+  function generateBarGraph(wrapper) {
+    // Set Up Values Array
+    var values = [];
+
+    // Get Values and save to Array
+    $(wrapper + ' .bar').each(function(index, el) {
+      values.push($(this).data('value'));
+    });
+
+      console.log(values);
+    // Get Max Value From Array
+    //var max_value = Math.max.apply(Math, values);
+
+    // Set width of bar to percent of max value
+    $(wrapper + ' .bar').each(function(index, el) {
+      var bar = $(this),
+          //value = bar.data('value'),
+          value = bar.attr('data-value');
+          percent = value;
+      //percent = Math.ceil((value / max_value) * 100);
+      // Set Width & Add Class
+      bar.width(percent + '%');
+      bar.addClass('in');
+    });
+      
+            //////////////////////
+//      d3.selectAll(wrapper + ' .bar').each(function() {
+//        //values.push(d3.select(this).attr('data-value'));
+//        var abc = d3.select(this);
+//        var myVal = Math.ceil(abc.attr('data-value'));
+//        console.log(myVal);
+//        abc.classed('in',true);
+//        abc.attr('width', myVal + 'px');
+//      })
+      //////////////////////
+  }
+
+  // Generate the bar graph on window load...
+  $(window).on('load', function(event) {
+    generateBarGraph('#dashboard-stats');
+  });
+//})(jQuery); // Fully reference jQuery after this point.
+//____________________________________________________________________________
