@@ -56,7 +56,7 @@
 
 @font-face {
     font-family: "PokemonGB";
-    src: url("/PokemonGB.ttf") format('truetype');
+    src: url("PokemonGB.ttf") format('truetype');
 }
 
 svg {
@@ -149,7 +149,7 @@ body {
 .chart-wrap .chart-title {
   margin-bottom: 10px;
   font-size: 12px;
-  font-family: 'Pokemon GB';
+  font-family: 'PokemonGB';
   text-align: center;
   color: black;
 }
@@ -206,7 +206,7 @@ body {
   font-weight: bold;
   z-index: 10;
   color: black;
-  font-family: 'Pokemon GB';
+  font-family: 'PokemonGB';
 }
 .chart-wrap .number {
   position: absolute;
@@ -220,7 +220,7 @@ body {
   text-align: right;
   z-index: 10;
   color: black;
-  font-family: 'Pokemon GB';
+  font-family: 'PokemonGB';
 }
 @media screen and (min-width: 800px) {
   .chart-wrap .row {
