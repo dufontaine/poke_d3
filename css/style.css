@@ -56,8 +56,8 @@
 
 @font-face {
     font-family: "Pokemon GB";
-    src: url("../poke_d3/fonts/Pokemon GB.ttf") format('truetype');
-    src: url("Pokemon GB.ttf") format('truetype');
+    src: url("../poke_d3/Pokemon GB.ttf") format('truetype');
+    //src: url("Pokemon GB.ttf") format('truetype');
 }
 
 svg {
