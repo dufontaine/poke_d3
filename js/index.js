@@ -58,12 +58,12 @@ function createListeners() {
             .attr("id", function(d){
                 return 'png' + d.Pokemon;
         }).attr('patternUnits', 'userSpaceOnUse')
-            .attr("width", 150)
+            .attr("width", 214)
             .attr("height", 150)
             .append("image")
             .attr("xlink:href", function(d){
                 return d.PNG;
-        }).attr("width", 150)
+        }).attr("width", 214)
           .attr("height", 150);
         
         svg.selectAll('rect')
@@ -185,6 +185,22 @@ function LoadPics(dat){
       .attr("fill", function(d){
      return "url(#" + d.Pokemon+ ")"; 
     })
+    
+    ////////////
+    svg.selectAll('text').data(dat).enter().append('text')
+    .attr("x", function(d,i){ 
+      return (i% grid.cols)*max.x;
+    }).attr("y", function(d,i){
+      return 10+Math.floor(i/(grid.cols))*max.y;
+    }).attr("width", max.x)
+      .attr("height", max.y).text(function(d,i){
+        if (d.Pokemon != 'pokeball'){
+            return d.Pokemon;
+        } else {return ''}
+    }).classed('ttip',true);
+    /////////////
+    
+    
 }
 
 
@@ -219,8 +235,8 @@ function makeRadar (myData) {
     //set up configuration for radar chart
     RadarChart.defaultConfig.color = function() {};
     RadarChart.defaultConfig.radius = 3;
-    RadarChart.defaultConfig.w = 400;
-    RadarChart.defaultConfig.h = 400;
+    RadarChart.defaultConfig.w = 300;
+    RadarChart.defaultConfig.h = 300;
     RadarChart.defaultConfig.maxValue = 100;
     RadarChart.defaultConfig.levels = 4;
     RadarChart.defaultConfig.circles=true;
@@ -229,8 +245,8 @@ function makeRadar (myData) {
     var chart = RadarChart.chart();
     var cfg = chart.config(); // retrieve default config
     var svg = d3.select('#cell_Radar').append('svg')
-        .attr('width', cfg.w + cfg.w + 50)
-        .attr('height', cfg.h + cfg.h / 4)
+        .attr('width', cfg.w )
+        .attr('height', cfg.h )
         .attr('id','radarSVG');
     svg.append('g').classed('single', 1).datum(radarData).call(chart);
     //render();

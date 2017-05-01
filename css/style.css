@@ -1,7 +1,10 @@
+td {
+    vertical-align: top;
+}
 
 #AddPoke{
   border-radius: 10px; 
-  display: inline-block;
+  display: block;
   cursor: pointer;
   color: rgb(255, 255, 255);
   font-family: Arial;
@@ -12,9 +15,12 @@
   margin: 5px 5px 5px 5px;
   background-color: rgb(68, 199, 103); 
   border: 1px solid black;
+  margin: 0px 15px 0px 15px;
+
 }
 
 #one_Poke{
+  border-radius: 4px;   
   margin: 5px 5px 5px 5px;
   display: inline-block;
   color: rgb(255, 255, 255);
@@ -22,18 +28,29 @@
   font-size: 16px;
   background-color: rgb(165, 165, 165); 
   width: 250px;
-  height: 350px;
+  height: 400px;
   border: solid black; 
 }
 
+#selText {
+    color: black;
+    font-size: 12px;
+    margin: 5px 5px 5px 15px;
+}
 #one_Poke_pic{
-    margin: 5px 0px 5px 46px;
+    border-radius: 3px;
+    margin: 5px 15px 5px 15px;
     display: inline-block;
     background: #d7dbde;
 }
 
 #pokeDescription{
-    margin: 5px 5px 5px 5px;
+    border-radius: 2px;
+    margin: 0px 15px 0px 15px;
+    height: 55px;
+    padding: 5px;
+    background-color: white;
+    border: double;
     display: inline-block;
     font-size:8px;
     color: black;
@@ -49,8 +66,8 @@
 
 #myDD{
     display: inline-block;
-    margin: 5px 0px 0px 46px;
-    width: 150px;
+    margin: 5px 0px 0px 5px;
+    width: 105px;
 }
 
 
@@ -63,6 +80,26 @@ svg {
     margin: 5px 5px 5px 5px;
     display: block;
     border: 1px solid black;
+}
+
+#myTeam{
+    text-align: center;
+    margin: 5px
+}
+
+#poke_grid{
+    margin: 0px 35px 0px 35px;
+}
+
+svg:hover .ttip{
+   fill: black;
+   display: block;
+}
+
+.ttip {
+    font-size: 10px;
+    fill: black;
+    display: none;
 }
 
 /*Pokemon Type colors */
@@ -144,11 +181,11 @@ body {
 .chart-wrap {
   max-width: 300px;
   margin: 0 auto;
-  padding: 10px;
+  padding: 10px 10px 5px 10px;
 }
 .chart-wrap .chart-title {
   margin-bottom: 10px;
-  font-size: 12px;
+  font-size: 10px;
   font-family: 'PokemonGB';
   text-align: center;
   color: black;
