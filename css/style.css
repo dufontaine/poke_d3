@@ -194,6 +194,30 @@ svg:hover .ttip{
 }
 
 
+#type_table{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#type_table td{
+    border: 1px solid black;
+    width: 40px;
+    height: 40px;
+    background-repeat:no-repeat;
+    background-size:38px 19px;
+    text-align:right;
+    vertical-align: middle;
+}
+
+#type_table .row_type{
+    width: 80px;
+}
+
+#type_table .row_mid{
+    height:20px;
+}
+
+
 /*Bar Chart Styles______________________________________________________*/
 /* Regular Styles */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
