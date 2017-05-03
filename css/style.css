@@ -403,6 +403,8 @@ body {
     background: lightgray;
     border-radius: 5px;
     border: solid black;
+    margin: 0 5px 0px 0px;
+    padding-right: 15px;
 }
 
 .tdTYPE{
@@ -414,4 +416,17 @@ body {
     font-family: PokemonGB;
     font-size: 10px;
     background-repeat: no-repeat;
+}
+
+#page_Description {
+    border-radius: 2px;
+    margin: 0px 0px 0px 2px;
+    padding: 5px;
+    background-color: white;
+    border: 4px double;
+    font-size:12px;
+    color: black;
+    font-family: "PokemonGB";
+    width: 685px;
+    height: 235px;
 }

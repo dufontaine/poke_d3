@@ -37,11 +37,10 @@
         </tr>
     </table>
     <table>
-
-        <tr>
-            <td id="cell_AddPoke"> 
+        <tr height=280px>
+            <td id="cell_AddPoke" rowspan="2"> 
                 <div id="one_Poke">
-                    <span id="selText">Select:  </span>
+                    <span id="selText">Pokedex  </span>
                     <select id="myDD">test</select>
                     <svg id="one_Poke_pic" width="214" height="150">
                         <rect width="214" height="150" fill="url(#pngAbra)"></rect>
@@ -104,7 +103,7 @@
                 </div>
                 
             </td>
-            <td id='cell_Radar'>Team Stats</td>
+            <td id='cell_Radar' rowspan="2">Team Stats</td>
             <br/>
             <td > <div id='cell_Heat'>Type Effectiveness</div>
                 <br/>
@@ -167,7 +166,7 @@
                             <td class="row_mid" style="background-image: url(http://www.serebii.net/pokedex-rs/type/dragon.gif);"> </td>
                         </tr>
                         <tr>
-                            <td class="row_type">Weakness</td>
+                            <td class="row_type">Def. Weakness</td>
                             <td id="C_normal"> </td>
                             <td id="C_fire"> </td>
                             <td id="C_water"> </td>
@@ -185,7 +184,7 @@
                             <td id="C_dragon"></td>
                         </tr>
                         <tr>
-                            <td class="row_type">Resist</td>
+                            <td class="row_type">Def. Resist</td>
                             <td id="D_normal"> </td>
                             <td id="D_fire"> </td>
                             <td id="D_water"> </td>
@@ -208,6 +207,21 @@
             </td>
         </tr>
         <tr>
+            <td rowspan="3" style="vertical-align:top">
+                <div id="page_Description">
+                    Welcome!<br><br>
+                    Build the ultimate team by selecting Pokemon from the Pokedex on the 
+                    left side of the page. Your team members are shown in the grid below the Pokedex.
+                    Remove a Pokemon by double-clicking on it.<br><br>
+                    You can view your team's stats in the radar chart. Be sure to toggle between the team average and
+                    individual views. All stats on this page have been scaled 0-100.<br><br>
+                    The heat map shows how your team will fair against different types of opponents. Darker colors
+                    indicate that you have more Pokemon with that strength/weakness.<br><br>
+                    -Professor Oak
+                </div>
+            </td>
+        </tr>
+        <tr>
             <td>
                 <div id='myTeam'>My Team</div>
             </td>
@@ -215,16 +229,13 @@
                 <div id="btnTeam" class='ToggleRadarOn'>Team Avg.</div>
                 <div id="btnInd" class='ToggleRadarOff'>Individuals</div>
             </td>
-            <td>XXXXXXXXXXXX</td>
         </tr>
         <tr>
-            <td id='cell_Lineup' colspan="2"></td>
+            <td colspan="2">
+                <div id='cell_Lineup'></div>
+            </td>
         </tr>
     </table>
-    
-    
-
-
 </body>
   
 </html>
