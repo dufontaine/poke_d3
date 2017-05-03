@@ -41,7 +41,7 @@
         <tr>
             <td id="cell_AddPoke"> 
                 <div id="one_Poke">
-                    <span id="selText">Select Pokemon:</span>
+                    <span id="selText">Select:  </span>
                     <select id="myDD">test</select>
                     <svg id="one_Poke_pic" width="214" height="150">
                         <rect width="214" height="150" fill="url(#pngAbra)"></rect>
@@ -53,8 +53,14 @@
                     </svg>
                     <div id='pokeDescription'>Using its ability to read minds, it will identify impending danger and TELEPORT to safety.</div>
                     <div class="chart-wrap">
+                        <table style="width:225px; text-align: center">
+                            <tr>
+                                <td class='tdTYPE'>Type:</td>
+                                <td id='T1' class="tdTYPE" style="background-image: url(http://www.serebii.net/pokedex-rs/type/psychic.gif);"></td>
+                                <td id='T2' class="tdTYPE"></td>
+                            </tr>
+                        </table>
                       <div class="chart-title">
-                        Stats
                       </div>
                       <div id="dashboard-stats" class="chart bars-horizontal brand-primary">
                         <div class="row">
@@ -96,8 +102,7 @@
                     </div>
                 <div id="AddPoke">Add to Team</div>
                 </div>
-                <br>
-                <div id='myTeam'>My Team</div>
+                
             </td>
             <td id='cell_Radar'>Team Stats</td>
             <br/>
@@ -201,7 +206,19 @@
                 </table>
                 <div id="type_desc"></div>
             </td>
-
+        </tr>
+        <tr>
+            <td>
+                <div id='myTeam'>My Team</div>
+            </td>
+            <td>
+                <div id="btnTeam" class='ToggleRadarOn'>Team Avg.</div>
+                <div id="btnInd" class='ToggleRadarOff'>Individuals</div>
+            </td>
+            <td>XXXXXXXXXXXX</td>
+        </tr>
+        <tr>
+            <td id='cell_Lineup' colspan="2"></td>
         </tr>
     </table>
     

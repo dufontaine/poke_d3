@@ -25,17 +25,54 @@ td {
   font-size: 16px;
   padding: 5px 5px 5px 5px;
   text-decoration: none;
+  text-align: center;
   text-shadow: rgb(47, 102, 39) 0px 1px 0px;
   margin: 5px 5px 5px 5px;
-  background-color: rgb(68, 199, 103); 
+  background-color: #4f43ae; 
   border: 1px solid black;
   margin: 0px 15px 0px 15px;
+}
 
+.ToggleRadarOn{
+  border-radius: 10px; 
+  display: block;
+  cursor: pointer;
+  color: rgb(255, 255, 255);
+  font-family: Arial;
+  font-size: 16px;
+  padding: 5px 5px 5px 5px;
+  text-decoration: none;
+  text-shadow: rgb(47, 102, 39) 0px 1px 0px;
+  margin: 0px 5px 5px 5px;
+  background-color: #4f43ae; 
+  text-align: center;
+  border: 1px solid black;
+  margin: 0px 15px 0px 15px;
+  width: 110px;
+  display: inline-block;
+}
+
+.ToggleRadarOff{
+  border-radius: 10px; 
+  display: block;
+  color: rgb(255, 255, 255);
+  font-family: Arial;
+  font-size: 16px;
+  padding: 5px 5px 5px 5px;
+  text-decoration: none;
+  text-shadow: rgb(47, 102, 39) 0px 1px 0px;
+  margin: 0px 5px 5px 5px;
+  background-color: rgb(168, 168, 168);
+  text-align: center;
+  border: 1px solid black;
+  margin: 0px 15px 0px 15px;
+  width: 110px;
+  display: inline-block;
 }
 
 #one_Poke{
   border-radius: 4px;   
-  margin: 5px 5px 5px 5px;
+  margin: 5px 5px 0px 5px;
   display: inline-block;
   color: rgb(255, 255, 255);
   font-family: Arial;
@@ -48,14 +85,15 @@ td {
 
 #selText {
     color: black;
-    font-size: 12px;
+    font-family: PokemonGB;
+    font-size: 10px;
     margin: 5px 5px 5px 15px;
 }
 #one_Poke_pic{
     border-radius: 3px;
     margin: 5px 15px 5px 15px;
     display: inline-block;
-    background: #d7dbde;
+    background: lightgray;
 }
 
 #pokeDescription{
@@ -81,7 +119,8 @@ td {
 #myDD{
     display: inline-block;
     margin: 5px 0px 0px 5px;
-    width: 105px;
+    width: 123px;
+    border-radius: 5px;
 }
 
 
@@ -98,13 +137,14 @@ svg {
 
 #myTeam{
     text-align: center;
-    margin: 5px;
+    margin: 10px;
     font-size: 16px;
     font-family: PokemonGB;
+    color: black;
 }
 
 #poke_grid{
-    margin: 0px 35px 0px 35px;
+    margin: 5px 0px 5px 18px;
 }
 
 svg:hover .ttip{
@@ -222,6 +262,10 @@ svg:hover .ttip{
     height:20px;
 }
 
+#btnTeam {
+    margin: 0px 0px 0px 70px;
+}
+
 
 /*Bar Chart Styles______________________________________________________*/
 /* Regular Styles */
@@ -244,10 +288,10 @@ body {
 .chart-wrap {
   max-width: 300px;
   margin: 0 auto;
-  padding: 10px 10px 5px 10px;
+  padding: 5px 10px 5px 10px;
 }
 .chart-wrap .chart-title {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-size: 10px;
   font-family: 'PokemonGB';
   text-align: center;
@@ -344,6 +388,7 @@ body {
   font-family: 'PokemonGB';
   padding: 10px 0 0 0;
   text-align: center;
+  color: black;
 }
 
 #cell_Heat {
@@ -351,4 +396,22 @@ body {
   font-family: 'PokemonGB';
   padding: 10px 0 0 0;
   text-align: center;
+  color: black;
+}
+
+#cell_Lineup {
+    background: lightgray;
+    border-radius: 5px;
+    border: solid black;
+}
+
+.tdTYPE{
+    vertical-align: middle;
+    width: 75px;
+    height: 18px;
+    background-size:38px 19px;
+    color: black;
+    font-family: PokemonGB;
+    font-size: 10px;
+    background-repeat: no-repeat;
 }

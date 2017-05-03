@@ -2,6 +2,7 @@ var dataset; //entire csv
 var filteredData; //only rows of selected Pokemon
 var SelectedPokes = [1, 4, 7, -1, -1, -1]; //numbers are pokemon index in data (Pokemon Number - 1)
 var radarData = [];
+var teamMode = false;
 
 //read csv of pokemon stats, types, and gifs
 d3.csv("pokeSTATS.csv", function(loadedData) {
@@ -42,6 +43,20 @@ function createListeners() {
                 document.getElementById('num_Speed').innerHTML = mySpeed;
                 document.getElementById('num_Special').innerHTML = mySpecial;
 
+                //change types
+                "url(http://www.serebii.net/pokedex-rs/type/normal.gif)"
+                d3.select('#T1').style('background-image', function(){
+                    myT = selPoke['Type 1'].toLowerCase();
+                    return ("url(http://www.serebii.net/pokedex-rs/type/" + myT + ".gif)");
+                })
+                d3.select('#T2').style('background-image', function(){
+                    myT = selPoke['Type 2'].toLowerCase();
+                    return ("url(http://www.serebii.net/pokedex-rs/type/" + myT + ".gif)");
+                })
+
+
+                
+                
                 //d3.select('#bar_HP').style('width',myHP + 'px');
                 generateBarGraph('#dashboard-stats');
             }
@@ -107,7 +122,29 @@ function createListeners() {
         createListeners();
         makeRadar(filteredData);
         UpdateTypeChart();
-    });  
+    }); 
+    
+    //toggle radar to team average mode
+    d3.select('#btnTeam').on('click', function() {
+        if (teamMode == false) {
+            teamMode = true;
+            makeRadar(filteredData);
+            //change button formats
+            d3.select('#btnTeam').classed('ToggleRadarOn',0).classed('ToggleRadarOff',1);
+            d3.select('#btnInd').classed('ToggleRadarOn',1).classed('ToggleRadarOff',0);
+        }
+    });
+    
+    //toggle radar to individual mode
+    d3.select('#btnInd').on('click', function() {
+        if (teamMode == true) {
+            teamMode = false;
+            makeRadar(filteredData);
+            //change button formats
+            d3.select('#btnInd').classed('ToggleRadarOn',0).classed('ToggleRadarOff',1);
+            d3.select('#btnTeam').classed('ToggleRadarOn',1).classed('ToggleRadarOff',0);
+        }
+    });
 };
 
 //filters pokemon list to only those selected
@@ -141,13 +178,13 @@ function createDD(dat){
 
 //loads pics of selected pokemon into grid
 function LoadPics(dat){
-    var grid = {rows: 2, cols: 3}; //dim of array of pokemon.(only cols matters)
-    var max = { x: 60, y: 60}; //size of pokemon images
+    var grid = {rows: 1, cols: 6}; //dim of array of pokemon.(only cols matters)
+    var max = { x: 100, y: 100}; //size of pokemon images
     
     var w = grid.cols * max.x; //w of svg
     var h = grid.rows * max.y; //h of svg
     d3.select('#poke_grid').remove();
-    var svg = d3.select('#cell_AddPoke') //make new svg 'canvas'
+    var svg = d3.select('#cell_Lineup') //make new svg 'canvas'
       .append('svg')
       .attr('id', 'poke_grid')
       .attr('width',w)
@@ -188,7 +225,6 @@ function LoadPics(dat){
      return "url(#" + d.Pokemon+ ")"; 
     })
     
-    ////////////
     svg.selectAll('text').data(dat).enter().append('text')
     .attr("x", function(d,i){ 
       return (i% grid.cols)*max.x;
@@ -200,9 +236,6 @@ function LoadPics(dat){
             return d.Pokemon;
         } else {return ''}
     }).classed('ttip',true);
-    /////////////
-    
-    
 }
 
 
@@ -231,9 +264,38 @@ function makeRadar (myData) {
     d3.select('#radarSVG').remove();
     //gather data for radar chart
     var radarData = [];
-    for (i=0; i<myData.length; i++) {
-        radarData.push(rowToJSON(myData[i]));
+    var team_avg_row = myData[0];
+    var aHP=0; var aAT=0; var aDE=0; var aSP=0; var aSL=0;
+    var pCount=0;
+    
+    if (teamMode == false) {
+        for (i=0; i<myData.length; i++) {
+            if (myData[i].Number != "999") {
+                radarData.push(rowToJSON(myData[i]));
+            }
+        }
+    } else {
+        for (i=0; i<myData.length; i++) {
+            if (myData[i].Number != "999") {
+                console.log('poke');
+                aHP += myData[i].HP*1;
+                aAT += myData[i].Attack*1;
+                aDE += myData[i].Defense*1;
+                aSP += myData[i].Speed*1;
+                aSL += myData[i].Special*1;
+                pCount += 1;
+            }
+        }
+        team_avg_row.HP = aHP/pCount;
+        team_avg_row.Attack = aAT/pCount;
+        team_avg_row.Defense = aDE/pCount;
+        team_avg_row.Speed = aSP/pCount;
+        team_avg_row.Special = aSL/pCount;
+        team_avg_row.Pokemon = 'Team';
+        team_avg_row['Type 1'] = 'Normal';
+        radarData.push(rowToJSON(team_avg_row));
     }
+
     //set up configuration for radar chart
     RadarChart.defaultConfig.color = function() {};
     RadarChart.defaultConfig.radius = 3;
@@ -349,7 +411,6 @@ function UpdateTypeChart() {
             }
             if(myPoke["Type 1"] == "Dragon" | myPoke["Type 2"] == "Dragon") {
                 attack_strength[14] += 1;
-                
                 defense_weak[5] += 1; defense_weak[14] += 1;
                 defense_resist[1] += 1; defense_resist[2] += 1; defense_resist[3] += 1; defense_resist[4] += 1;
             }
