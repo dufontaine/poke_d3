@@ -237,8 +237,8 @@ function makeRadar (myData) {
     //set up configuration for radar chart
     RadarChart.defaultConfig.color = function() {};
     RadarChart.defaultConfig.radius = 3;
-    RadarChart.defaultConfig.w = 400;
-    RadarChart.defaultConfig.h = 400;
+    RadarChart.defaultConfig.w = 370;
+    RadarChart.defaultConfig.h = 370;
     RadarChart.defaultConfig.maxValue = 100;
     RadarChart.defaultConfig.levels = 4;
     RadarChart.defaultConfig.circles=true;

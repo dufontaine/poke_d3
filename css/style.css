@@ -8,7 +8,7 @@
 }
 
 .Rainbow {
-    width: 86.67px;
+    width: 88px;
     height: 5px;
 }
 
@@ -99,7 +99,8 @@ svg {
 #myTeam{
     text-align: center;
     margin: 5px;
-    font-size: 18px;
+    font-size: 16px;
+    font-family: PokemonGB;
 }
 
 #poke_grid{
@@ -203,7 +204,6 @@ svg:hover .ttip{
     border: 1px solid black;
     width: 40px;
     height: 40px;
-    background-repeat:no-repeat;
     background-size:38px 19px;
     text-align:right;
     vertical-align: middle;
@@ -211,6 +211,11 @@ svg:hover .ttip{
 
 #type_table .row_type{
     width: 80px;
+    font-family: PokemonGB;
+    font-size: 10px;
+    background-color: black;
+    color: white;
+    border-color: gray;
 }
 
 #type_table .row_mid{
@@ -334,3 +339,16 @@ body {
 
 
 
+#cell_Radar{
+  font-size: 16px;
+  font-family: 'PokemonGB';
+  padding: 10px 0 0 0;
+  text-align: center;
+}
+
+#cell_Heat {
+  font-size: 16px;
+  font-family: 'PokemonGB';
+  padding: 10px 0 0 0;
+  text-align: center;
+}
