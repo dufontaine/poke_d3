@@ -48,12 +48,12 @@ d3.json("graph.json", function(error, json) {
       .attr("class", "node")
       .call(force.drag);
 
- /* node.append("image")
+node.append("image")
       .attr("xlink:href", "https://github.com/favicon.ico")
       .attr("x", -8)
       .attr("y", -8)
       .attr("width", 16)
-      .attr("height", 16);*/
+      .attr("height", 16);
 
  node.append("title")
       .text(function(d) { return d.id; });    
