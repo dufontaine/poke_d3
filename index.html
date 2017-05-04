@@ -36,6 +36,7 @@
             <td  class="Dragon Rainbow"></td>
         </tr>
     </table>
+    <div height='6px;' style='font-size:6px;'>&nbsp;</div>
     <table>
         <tr height=280px>
             <td id="cell_AddPoke" rowspan="2"> 
@@ -104,11 +105,7 @@
                 
             </td>
             <td id='cell_Radar' rowspan="2">Team Stats</td>
-            <br/>
             <td > <div id='cell_Heat'>Type Effectiveness</div>
-                <br/>
-                <br/>
-                <br/>
                 <table id='type_table'>
                     <tbody>
                         <tr>
@@ -203,7 +200,54 @@
                         </tr>
                     </tbody>
                 </table>
-                <div id="type_desc"></div>
+                <br>
+                <div class='legend_text'>Legend:</div>
+                <table class='legend_table'>
+                    <tr>
+                        <td class="legend_label">Number of Pokemon:</td>
+                        <td class='legend_value'>0</td>
+                        <td class='legend_value'>1</td>
+                        <td class='legend_value'>2</td>
+                        <td class='legend_value'>3</td>
+                        <td class='legend_value'>4</td>
+                        <td class='legend_value'>5</td>
+                        <td class='legend_value'>6</td>
+                    </tr>
+                    <tr>
+                        <td class="legend_label">Color:</td>
+                        <td class='legend_value' style="background-color:#ffffff"></td>
+                        <td class='legend_value' style="background-color:#ccece6"></td>
+                        <td class='legend_value' style="background-color:#99d8c9"></td>
+                        <td class='legend_value' style="background-color:#66c2a4"></td>
+                        <td class='legend_value' style="background-color:#41ae76"></td>
+                        <td class='legend_value' style="background-color:#238b45"></td>
+                        <td class='legend_value' style="background-color:#006d2c"></td>
+                    </tr>
+                </table>
+                <table class='legend_table'>
+                    <tr>
+                        <td class="legend_label">Number of Pokemon:</td>
+                        <td class='legend_value'>0</td>
+                        <td class='legend_value'>1</td>
+                        <td class='legend_value'>2</td>
+                        <td class='legend_value'>3</td>
+                        <td class='legend_value'>4</td>
+                        <td class='legend_value'>5</td>
+                        <td class='legend_value'>6</td>
+                    </tr>
+                    <tr>
+                        <td class="legend_label">Color:</td>
+                        <td class='legend_value' style="background-color:#ffffff"></td>
+                        <td class='legend_value' style="background-color:#fcbba1"></td>
+                        <td class='legend_value' style="background-color:#fc9272"></td>
+                        <td class='legend_value' style="background-color:#fb6a4a"></td>
+                        <td class='legend_value' style="background-color:#ef3b2c"></td>
+                        <td class='legend_value' style="background-color:#cb181d"></td>
+                        <td class='legend_value' style="background-color:#a50f15"></td>
+                    </tr>
+                </table>
+                <br>
+                <br>
             </td>
         </tr>
         <tr>
@@ -212,7 +256,7 @@
                     Welcome!<br><br>
                     Build the ultimate team by selecting Pokemon from the Pokedex on the 
                     left side of the page. Your team members are shown in the grid below the Pokedex.
-                    Remove a Pokemon by double-clicking on it.<br><br>
+                    Remove a Pokemon from your team by double-clicking on it.<br><br>
                     You can view your team's stats in the radar chart. Be sure to toggle between the team average and
                     individual views. All stats on this page have been scaled 0-100.<br><br>
                     The heat map shows how your team will fair against different types of opponents. Darker colors

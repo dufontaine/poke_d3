@@ -128,10 +128,10 @@ function createListeners() {
     d3.select('#btnTeam').on('click', function() {
         if (teamMode == false) {
             teamMode = true;
-            makeRadar(filteredData);
             //change button formats
             d3.select('#btnTeam').classed('ToggleRadarOn',0).classed('ToggleRadarOff',1);
             d3.select('#btnInd').classed('ToggleRadarOn',1).classed('ToggleRadarOff',0);
+            makeRadar(filteredData);
         }
     });
     
@@ -139,10 +139,10 @@ function createListeners() {
     d3.select('#btnInd').on('click', function() {
         if (teamMode == true) {
             teamMode = false;
-            makeRadar(filteredData);
             //change button formats
             d3.select('#btnInd').classed('ToggleRadarOn',0).classed('ToggleRadarOff',1);
             d3.select('#btnTeam').classed('ToggleRadarOn',1).classed('ToggleRadarOff',0);
+            makeRadar(filteredData);
         }
     });
 };
@@ -264,15 +264,22 @@ function makeRadar (myData) {
     d3.select('#radarSVG').remove();
     //gather data for radar chart
     var radarData = [];
-    var team_avg_row = myData[0];
+    var team_avg_row = (JSON.parse(JSON.stringify(myData[0])));
+    var dummy_row = team_avg_row;
     var aHP=0; var aAT=0; var aDE=0; var aSP=0; var aSL=0;
     var pCount=0;
+    var k = 0;
     
     if (teamMode == false) {
         for (i=0; i<myData.length; i++) {
             if (myData[i].Number != "999") {
+                k++;
                 radarData.push(rowToJSON(myData[i]));
             }
+        }
+        if (k==0){
+            //dummy_row.HP = 1/0;
+            radarData.push(rowToJSON(dummy_row));
         }
     } else {
         for (i=0; i<myData.length; i++) {
@@ -312,6 +319,7 @@ function makeRadar (myData) {
         .attr('width', cfg.w )
         .attr('height', cfg.h )
         .attr('id','radarSVG');
+    console.log(radarData);
     svg.append('g').classed('single', 1).datum(radarData).call(chart);
     //render();
 }
@@ -531,3 +539,4 @@ function UpdateTypeChart() {
   });
 //})(jQuery); // Fully reference jQuery after this point.
 //____________________________________________________________________________
+
