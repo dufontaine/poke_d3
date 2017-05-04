@@ -2,70 +2,96 @@
 <meta charset="utf-8">
 <style>
 
-.link {
-  stroke: #ccc;
+.node {
+  stroke: #000;
+  stroke-width: 1.5px;
 }
 
-.node text {
-  pointer-events: none;
-  font: 10px sans-serif;
+.link {
+  stroke: #999;
+  stroke-width: 1.5px;
 }
 
 </style>
-<body>
-<script src="//d3js.org/d3.v3.min.js"></script>
+<svg width="1600" height="1600"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
-var width = 1600,
-    height = 1600
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+var simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-200))
+    .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(40))
+    .force("x", d3.forceX(width / 2))
+    .force("y", d3.forceY(height / 2))
+    .on("tick", ticked);
 
-var force = d3.layout.force()
-    .gravity(0.05)
-    .distance(100)
-    .charge(-100)
-    .size([width, height]);
+var link = svg.selectAll(".link"),
+    node = svg.selectAll(".node");
 
-d3.json("graph.json", function(error, json) {
+d3.json("pokemon2.json", function(error, graph) {
   if (error) throw error;
 
-  force
-      .nodes(json.nodes)
-      .links(json.links)
-      .start();
+  simulation.nodes(graph.nodes);
+  simulation.force("link").links(graph.links);
 
-  var link = svg.selectAll(".link")
-      .data(json.links)
+  link = link
+    .data(graph.links)
     .enter().append("line")
       .attr("class", "link");
 
-  var node = svg.selectAll(".node")
-      .data(json.nodes)
-    .enter().append("g")
-      .attr("class", "node")
-      .call(force.drag);
+  node = node
+    .data(graph.nodes, function(d) {return d.id;
+    });
+  
+node = node.enter()
+    .append("g")
+    .attr("class", "node")
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
 
-node.append("image")
-      .attr("xlink:href", "https://github.com/favicon.ico")
-      .attr("x", -8)
-      .attr("y", -8)
-      .attr("width", 16)
-      .attr("height", 16);
-
- node.append("title")
-      .text(function(d) { return d.id; });    
-
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-  });
+node.append("circle")
+    .attr("r", 10)
 });
+
+function ticked() {
+    link
+        .attr("x1", function(d) {
+            return d.source.x;
+        })
+        .attr("y1", function(d) {
+            return d.source.y;
+        })
+        .attr("x2", function(d) {
+            return d.target.x;
+        })
+        .attr("y2", function(d) {
+            return d.target.y;
+        });
+
+    node
+        .attr("transform", function(d) {
+            return "translate(" + d.x + ", " + d.y + ")";
+        });
+}
+  
+function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart()
+}
+
+function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+}
+
+function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = undefined;
+    d.fy = undefined;
+}
 
 </script>

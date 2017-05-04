@@ -11,7 +11,7 @@
 }
 
 </style>
-<svg width="960" height="600"></svg>
+<svg width="2000" height="2000"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
@@ -26,7 +26,7 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("https://gist.githubusercontent.com/chosun41/cd6593307b2fe803babc1dc831f05386/raw/41182862bb6d3a8a47f34908403486acae186d1d/pokemon.json", function(error, graph) {
+d3.json("https://gist.githubusercontent.com/anonymous/190293098bb73245b39147a4dbbf37aa/raw/4b025dcb715099f46d8f04e535ea544a314ee095/pokemon.json", function(error, graph) {
   if (error) throw error;
 
   var link = svg.append("g")
