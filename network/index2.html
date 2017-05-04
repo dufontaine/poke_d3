@@ -2,96 +2,88 @@
 <meta charset="utf-8">
 <style>
 
-.node {
-  stroke: #000;
-  stroke-width: 1.5px;
+.link {
+  stroke: #ccc;
 }
 
-.link {
-  stroke: #999;
-  stroke-width: 1.5px;
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
 }
 
 </style>
-<svg width="1600" height="1600"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<body>
+<script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+var width = 1600,
+    height = 1600
 
-var simulation = d3.forceSimulation()
-    .force("charge", d3.forceManyBody().strength(-200))
-    .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(40))
-    .force("x", d3.forceX(width / 2))
-    .force("y", d3.forceY(height / 2))
-    .on("tick", ticked);
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-var link = svg.selectAll(".link"),
-    node = svg.selectAll(".node");
+var force = d3.layout.force()
+    .gravity(0.05)
+    .distance(100)
+    .charge(-100)
+    .size([width, height]);
 
-d3.json("pokemon2.json", function(error, graph) {
+d3.json("https://gist.githubusercontent.com/anonymous/190293098bb73245b39147a4dbbf37aa/raw/4b025dcb715099f46d8f04e535ea544a314ee095/pokemon.json", function(error, json) {
   if (error) throw error;
 
-  simulation.nodes(graph.nodes);
-  simulation.force("link").links(graph.links);
+  var edges = [];
+json.links.forEach(function(e) {
+    var sourceNode = json.nodes.filter(function(n) {
+        return n.id === e.source;
+    })[0],
+        targetNode = json.nodes.filter(function(n) {
+            return n.id === e.target;
+        })[0];
 
-  link = link
-    .data(graph.links)
+    edges.push({
+        source: sourceNode,
+        target: targetNode,
+        value: e.Value
+    });
+})
+  
+  force
+      .nodes(json.nodes)
+      .links(edges)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(edges)
     .enter().append("line")
       .attr("class", "link");
 
-  node = node
-    .data(graph.nodes, function(d) {return d.id;
-    });
-  
-node = node.enter()
-    .append("g")
-    .attr("class", "node")
-    .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
+  var node = svg.selectAll(".node")
+      .data(json.nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .call(force.drag);
 
-node.append("circle")
-    .attr("r", 10)
+  node.append("image")
+      .attr("xlink:href",  function(d) { return d.img;})
+      .attr("x", -8)
+      .attr("y", -8)
+      .attr("width", 50)
+      .attr("height", 50);
+
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
 });
-
-function ticked() {
-    link
-        .attr("x1", function(d) {
-            return d.source.x;
-        })
-        .attr("y1", function(d) {
-            return d.source.y;
-        })
-        .attr("x2", function(d) {
-            return d.target.x;
-        })
-        .attr("y2", function(d) {
-            return d.target.y;
-        });
-
-    node
-        .attr("transform", function(d) {
-            return "translate(" + d.x + ", " + d.y + ")";
-        });
-}
-  
-function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart()
-}
-
-function dragged(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
-}
-
-function dragended(d) {
-    if (!d3.event.active) simulation.alphaTarget(0);
-    d.fx = undefined;
-    d.fy = undefined;
-}
 
 </script>
