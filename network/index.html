@@ -1,91 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>poke_d32</title>
+  <link rel="stylesheet" href="stylenetwork.css">
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<!--  <script src='js/Radar.js'></script>-->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<!--  <script src="js/index.js"></script>-->
+</head>
+
+<!--<meta charset="utf-8">-->
 <style>
-
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
-}
-
-.nodes circle {
-  stroke: #fff;
+    
+path.link {
+  fill: none;
+  stroke: #666;
   stroke-width: 1.5px;
 }
 
+.link {
+  stroke: #ccc;
+}
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
 </style>
-<svg width="2000" height="2000"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<body>
+    
+        <tr>
+            <td rowspan="3" style="vertical-align:bottom">
+                <div id="page_Description">
+                    Welcome!<br><br>
+                    Build the ultimate team by selecting Pokemon from the Pokedex on the 
+                    left side of the page. Your team members are shown in the grid below the Pokedex.
+                    Remove a Pokemon from your team by double-clicking on it.<br><br>
+                    You can view your team's stats in the radar chart. Be sure to toggle between the team average and
+                    individual views. All stats on this page have been scaled 0-100.<br><br>
+                    The heat map shows how your team will fair against different types of opponents. Darker colors
+                    indicate that you have more Pokemon with that strength/weakness.<br><br>
+                    -Professor Oak
+                </div>
+            </td>
+        </tr>
+
+    </table>   
+    
+<!--<script src="https://d3js.org/d3.v3.min.js"></script>-->
 <script>
 
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+var tcBlack = "#130C0E";
+var x_browser = 20,
+    y_browser = 25;
+    
+var width = 1200,
+    height = 1200
 
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2));
+var force = d3.layout.force()
+    .gravity(0.05)
+    .distance(100)
+    .charge(-100)
+    .size([width, height]);
+    
+svg.append("defs").selectAll("marker")
+    .data(["suit", "licensing", "resolved"])
+  .enter().append("marker")
+    .attr("id", function(d) { return d; })
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 25)
+    .attr("refY", 0)
+    .attr("markerWidth", 15)
+    .attr("markerHeight", 15)
+    .attr("orient", "auto")
+  .append("path")
+    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+    .style("stroke", "#4679BD")
+    .style("opacity", "0.6");
+    
+    
+//    d3.selection.prototype.moveToFront = function() {  
+//      return this.each(function(){
+//        this.parentNode.appendChild(this);
+//      });
+//    };
+//    d3.selection.prototype.moveToBack = function() {  
+//        return this.each(function() { 
+//            var firstChild = this.parentNode.firstChild; 
+//            if (firstChild) { 
+//                this.parentNode.insertBefore(this, firstChild); 
+//            } 
+//        });
+//    };
 
-d3.json("https://gist.githubusercontent.com/anonymous/190293098bb73245b39147a4dbbf37aa/raw/4b025dcb715099f46d8f04e535ea544a314ee095/pokemon.json", function(error, graph) {
+d3.json("https://gist.githubusercontent.com/anonymous/190293098bb73245b39147a4dbbf37aa/raw/4b025dcb715099f46d8f04e535ea544a314ee095/pokemon.json", function(error, json) {
   if (error) throw error;
 
-  var link = svg.append("g")
-      .attr("class", "links")
-    .selectAll("line")
-    .data(graph.links)
-    .enter().append("line")
-      .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+  var edges = [];
+    json.links.forEach(function(e) {
+    var sourceNode = json.nodes.filter(function(n) {
+        return n.id === e.source;
+    })[0],
+        targetNode = json.nodes.filter(function(n) {
+            return n.id === e.target;
+        })[0];
 
-  var node = svg.append("g")
-      .attr("class", "nodes")
-    .selectAll("circle")
-    .data(graph.nodes)
-    .enter().append("circle")
-      .attr("r", 5)
-      .attr("fill", function(d) { return color(d.group); })
-      .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended));
+    edges.push({
+        source: sourceNode,
+        target: targetNode,
+        value: e.Value
+    });
+})
+  
+  force
+      .nodes(json.nodes)
+      .links(edges)
+      .start();
 
-  node.append("title")
+  var link = svg.selectAll(".link")
+      .data(edges)
+      .enter().append("line")
+      .attr("class", "link")
+      .style("marker-end",  "url(#suit)");
+
+  var node = svg.selectAll(".node")
+      .data(json.nodes)
+
+    // Enter any new nodes.
+  var nodeEnter = node.enter().append("svg:g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .call(force.drag);
+ 
+  // Append a circle
+  nodeEnter.append("svg:circle")
+      .attr("r", function(d) { return 20; })
+ 
+  // Append images
+  var images = nodeEnter.append("svg:image")
+        .attr("xlink:href",  function(d) { return d.img;})
+        .attr("x", function(d) { return -25;})
+        .attr("y", function(d) { return -25;})
+        .attr("height", 50)
+        .attr("width", 50);
+  
+    // make the image grow a little on mouse over and add the text details on click
+  var setEvents = images
+          // Append hero text
+          .on( 'mouseenter', function() {
+            // select element in current context
+            d3.select( this )
+              .transition()
+              .attr("x", function(d) { return -100;})
+              .attr("y", function(d) { return -100;})
+              .attr("height", 200)
+              .attr("width", 200)
+          })
+          // set back
+          .on( 'mouseleave', function() {
+            d3.select( this )
+              .transition()
+              .attr("x", function(d) { return -25;})
+              .attr("y", function(d) { return -25;})
+              .attr("height", 50)
+              .attr("width", 50);
+          });
+
+
+ /*nodeEnter.append("text")
+      .attr("class", "nodetext")
+      .attr("x", x_browser)
+      .attr("y", y_browser +15)
+      .attr("fill", tcBlack)
       .text(function(d) { return d.id; });
 
-  simulation
-      .nodes(graph.nodes)
-      .on("tick", ticked);
+node.exit().remove();*/
 
-  simulation.force("link")
-      .links(graph.links);
-
-  function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-    node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  }
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
 });
 
-function dragstarted(d) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
-}
-
-function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
-}
-
-function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-}
-
 </script>
+</body>
+  
+</html>

@@ -12,7 +12,7 @@ from collections import Counter
 import pandas as pd
 import io
 import requests
-from pokeapi import pokemon
+#from pokeapi import pokemon
 
 #%%
 #Funtions
@@ -53,7 +53,8 @@ linksinfo=[]
 ind=0
 for i in pokemon_names:
     #pokemonInfo = pokemon.Pokemon(i) # very slow if activated
-    nodesinfo.append({"id":i, "group":1, "img":pokemon_images.loc[i]['PNG']})
+    nodesinfo.append({"id":i, "group":1, "img":pokemon_images.loc[i]['PNG'], 
+                      "type1":pokemon_images.loc[i]['Type 1'], "type2":pokemon_images.loc[i]['Type 2']})
     if i in smogonData['data']:
         top = Counter(smogonData['data'][i]['Teammates']).most_common()[:1]
         construct_links(i, top, linksinfo)

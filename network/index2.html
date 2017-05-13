@@ -1,6 +1,22 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<head>
+  <meta charset="utf-8">
+  <title>poke_d32</title>
+  <link rel="stylesheet" href="stylenetwork.css">
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<!--  <script src='js/Radar.js'></script>-->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<!--  <script src="js/index.js"></script>-->
+</head>
+
+<!--<meta charset="utf-8">-->
 <style>
+    
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
 
 .link {
   stroke: #ccc;
@@ -12,8 +28,70 @@
 }
 
 </style>
+
 <body>
-<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<!--// top border-->
+   <table style='border-collapse: collapse;' width=1335px> 
+        <tr>
+            <td colspan=15 id='TITLE'>POKE-VIZ:  NETWORK ANALYZER </td>
+        </tr>
+    
+            <tr>
+            <td  class="Normal Rainbow"></td>
+            <td  class="Fire Rainbow"></td>
+            <td  class="Water Rainbow"></td>
+            <td  class="Electric Rainbow"></td>
+            <td  class="Grass Rainbow"></td>
+            <td  class="Ice Rainbow"></td>
+            <td  class="Fighting Rainbow"></td>
+            <td  class="Poison Rainbow"></td>
+            <td  class="Ground Rainbow"></td>
+            <td  class="Flying Rainbow"></td>
+            <td  class="Psychic Rainbow"></td>
+            <td  class="Bug Rainbow"></td>
+            <td  class="Rock Rainbow"></td>
+            <td  class="Ghost Rainbow"></td>
+            <td  class="Dragon Rainbow"></td>
+        </tr>
+    </table>
+    <div height='6px;' style='font-size:6px;'>&nbsp;</div>
+    
+<!--    //dialog box-->
+        <tr>
+            <td rowspan="3" style="vertical-align:text-bottom">
+                <div id="page_Description">
+                    My my! You have so many Pokemon to choose from. <br><br>
+                    From the right you can select individual Pokemon to read
+                    their name, type, and network measure. <br><br>
+                    You can also choose type of Pokemon to notice network patterns. <br><br>
+                    -Professor Oak
+                </div>
+            </td>
+        </tr>
+    
+<!--//selection box-->
+    
+     <table>
+        <tr height=100px>
+                <div id="one_Poke">
+                    <span id="selText">Select Pokemon:  </span>
+                    <select id="myDD">test</select>
+                    <div class="chart-wrap">
+                        <table style="width:225px; text-align: right">
+    </table>
+                        
+    <table>
+        <tr height=100px>
+                <div id="one_Poke">
+                    <span id="selText">Select Type:  </span>
+                    <select id="myDD">test</select>
+                    <div class="chart-wrap">
+                        <table style="width:225px; text-align: right">
+    </table>
+    
+    
+<!--<script src="https://d3js.org/d3.v3.min.js"></script>-->
 <script>
 
 var tcBlack = "#130C0E";
@@ -21,7 +99,8 @@ var x_browser = 20,
     y_browser = 25;
     
 var width = 1200,
-    height = 1200
+    height = 1200,
+    radius = 6;
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -32,12 +111,59 @@ var force = d3.layout.force()
     .distance(100)
     .charge(-100)
     .size([width, height]);
+    
+svg.append("defs").selectAll("marker")
+    .data(["end"])
+  .enter().append("marker")
+    .attr("id", function(d) { return d; })
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 25)
+    .attr("refY", 0)
+    .attr("markerWidth", 15)
+    .attr("markerHeight", 15)
+    .attr("orient", "auto")
+  .append("path")
+    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+    .style("stroke", "#4679BD")
+    .style("opacity", "0.6");
+    
+
+//creates drop-down list to pick pokemon
+function createDD(dat){
+    d3.select("#myDD")
+    .selectAll("option")
+    .data(dat.sort(function(a,b) {return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);} ))
+    .enter()
+    .append("option")
+    .attr("value", function(d) {return parseInt(d.id);})
+    .text(function(d) {
+        return d.id; 
+    });
+    return 0;
+}
+    
+//    d3.selection.prototype.moveToFront = function() {  
+//      return this.each(function(){
+//        this.parentNode.appendChild(this);
+//      });
+//    };
+//    d3.selection.prototype.moveToBack = function() {  
+//        return this.each(function() { 
+//            var firstChild = this.parentNode.firstChild; 
+//            if (firstChild) { 
+//                this.parentNode.insertBefore(this, firstChild); 
+//            } 
+//        });
+//    };
 
 d3.json("https://gist.githubusercontent.com/anonymous/190293098bb73245b39147a4dbbf37aa/raw/4b025dcb715099f46d8f04e535ea544a314ee095/pokemon.json", function(error, json) {
   if (error) throw error;
+    
+//fill selection box
+    createDD(json.nodes)
 
   var edges = [];
-json.links.forEach(function(e) {
+    json.links.forEach(function(e) {
     var sourceNode = json.nodes.filter(function(n) {
         return n.id === e.source;
     })[0],
@@ -59,8 +185,9 @@ json.links.forEach(function(e) {
 
   var link = svg.selectAll(".link")
       .data(edges)
-    .enter().append("line")
-      .attr("class", "link");
+      .enter().append("line")
+      .attr("class", "link")
+      .style("marker-end",  "url(#end)");
 
   var node = svg.selectAll(".node")
       .data(json.nodes)
@@ -93,7 +220,7 @@ json.links.forEach(function(e) {
               .attr("x", function(d) { return -100;})
               .attr("y", function(d) { return -100;})
               .attr("height", 200)
-              .attr("width", 200);
+              .attr("width", 200)
           })
           // set back
           .on( 'mouseleave', function() {
@@ -105,6 +232,7 @@ json.links.forEach(function(e) {
               .attr("width", 50);
           });
 
+
  /*nodeEnter.append("text")
       .attr("class", "nodetext")
       .attr("x", x_browser)
@@ -115,6 +243,9 @@ json.links.forEach(function(e) {
 node.exit().remove();*/
 
   force.on("tick", function() {
+    node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+        .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });    
+      
     link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
