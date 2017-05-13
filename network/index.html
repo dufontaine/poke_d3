@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<html>
-
 <head>
   <meta charset="utf-8">
   <title>poke_d32</title>
@@ -32,24 +30,67 @@ path.link {
 </style>
 
 <body>
-    
+
+<!--// top border-->
+   <table style='border-collapse: collapse;' width=1335px> 
         <tr>
-            <td rowspan="3" style="vertical-align:bottom">
+            <td colspan=15 id='TITLE'>POKE-VIZ:  NETWORK ANALYZER </td>
+        </tr>
+    
+            <tr>
+            <td  class="Normal Rainbow"></td>
+            <td  class="Fire Rainbow"></td>
+            <td  class="Water Rainbow"></td>
+            <td  class="Electric Rainbow"></td>
+            <td  class="Grass Rainbow"></td>
+            <td  class="Ice Rainbow"></td>
+            <td  class="Fighting Rainbow"></td>
+            <td  class="Poison Rainbow"></td>
+            <td  class="Ground Rainbow"></td>
+            <td  class="Flying Rainbow"></td>
+            <td  class="Psychic Rainbow"></td>
+            <td  class="Bug Rainbow"></td>
+            <td  class="Rock Rainbow"></td>
+            <td  class="Ghost Rainbow"></td>
+            <td  class="Dragon Rainbow"></td>
+        </tr>
+    </table>
+    <div height='6px;' style='font-size:6px;'>&nbsp;</div>
+    
+<!--    //dialog box-->
+        <tr>
+            <td rowspan="3" style="vertical-align:text-bottom">
                 <div id="page_Description">
-                    Welcome!<br><br>
-                    Build the ultimate team by selecting Pokemon from the Pokedex on the 
-                    left side of the page. Your team members are shown in the grid below the Pokedex.
-                    Remove a Pokemon from your team by double-clicking on it.<br><br>
-                    You can view your team's stats in the radar chart. Be sure to toggle between the team average and
-                    individual views. All stats on this page have been scaled 0-100.<br><br>
-                    The heat map shows how your team will fair against different types of opponents. Darker colors
-                    indicate that you have more Pokemon with that strength/weakness.<br><br>
+                    My my, You have so many Pokemon to choose from! <br><br>
+                    From the right you can select individual Pokemon to read
+                    their name, type, and network measure. <br><br>
+                    You can also choose to select type of Pokemon and Pokemons
+                    with more than one type to help build your team. <br><br>
                     -Professor Oak
                 </div>
             </td>
         </tr>
-
-    </table>   
+    
+<!--//selection box-->
+    
+     <table>
+        <tr height=100px>
+                <div id="one_Poke">
+                    <span id="selText">Select Pokemon:  </span>
+                    <select id="myDD">test</select>
+                    <div class="chart-wrap">
+                        <table style="width:225px; text-align: right">
+    </table>
+                        
+         <table>
+        <tr height=100px>
+                <div id="one_Poke">
+                    <span id="selText">Select Type:  </span>
+                    <select id="myDD">test</select>
+                    <div class="chart-wrap">
+                        <table style="width:225px; text-align: right">
+    </table>
+    
     
 <!--<script src="https://d3js.org/d3.v3.min.js"></script>-->
 <script>
@@ -59,7 +100,8 @@ var x_browser = 20,
     y_browser = 25;
     
 var width = 1200,
-    height = 1200
+    height = 1200,
+    radius = 6;
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -72,7 +114,7 @@ var force = d3.layout.force()
     .size([width, height]);
     
 svg.append("defs").selectAll("marker")
-    .data(["suit", "licensing", "resolved"])
+    .data(["end"])
   .enter().append("marker")
     .attr("id", function(d) { return d; })
     .attr("viewBox", "0 -5 10 10")
@@ -86,6 +128,20 @@ svg.append("defs").selectAll("marker")
     .style("stroke", "#4679BD")
     .style("opacity", "0.6");
     
+
+//creates drop-down list to pick pokemon
+function createDD(dat){
+    d3.select("#myDD")
+    .selectAll("option")
+    .data(dat.sort(function(a,b) {return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);} ))
+    .enter()
+    .append("option")
+    .attr("value", function(d) {return parseInt(d.id);})
+    .text(function(d) {
+        return d.id; 
+    });
+    return 0;
+}
     
 //    d3.selection.prototype.moveToFront = function() {  
 //      return this.each(function(){
@@ -101,8 +157,11 @@ svg.append("defs").selectAll("marker")
 //        });
 //    };
 
-d3.json("https://gist.githubusercontent.com/anonymous/190293098bb73245b39147a4dbbf37aa/raw/4b025dcb715099f46d8f04e535ea544a314ee095/pokemon.json", function(error, json) {
+d3.json("https://gist.githubusercontent.com/chosun41/a6b49548df20b6d25f94152bf4b9eda3/raw/8c9a373de0430e3e37e1257cd7b3722f914d00cc/pokemon.json", function(error, json) {
   if (error) throw error;
+    
+//fill selection box
+    createDD(json.nodes)
 
   var edges = [];
     json.links.forEach(function(e) {
@@ -129,7 +188,7 @@ d3.json("https://gist.githubusercontent.com/anonymous/190293098bb73245b39147a4db
       .data(edges)
       .enter().append("line")
       .attr("class", "link")
-      .style("marker-end",  "url(#suit)");
+      .style("marker-end",  "url(#end)");
 
   var node = svg.selectAll(".node")
       .data(json.nodes)
@@ -185,6 +244,9 @@ d3.json("https://gist.githubusercontent.com/anonymous/190293098bb73245b39147a4db
 node.exit().remove();*/
 
   force.on("tick", function() {
+    node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+        .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });    
+      
     link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
@@ -195,6 +257,3 @@ node.exit().remove();*/
 });
 
 </script>
-</body>
-  
-</html>

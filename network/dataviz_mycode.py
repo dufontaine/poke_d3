@@ -47,14 +47,27 @@ pokemon_images.index = pokemon_images['Pokemon']
 
 #%%
 # Construct dictionary
+import math
+
+def is_nan(x):
+    return isinstance(x, float) and math.isnan(x)
+
 dictionary={"nodes":[], "links":[]}
 nodesinfo=[]
 linksinfo=[]
 ind=0
 for i in pokemon_names:
+    type2=pokemon_images.loc[i]['Type 2']
+    if is_nan(type2):
+        type2="None"
+    morethan1type=""
+    if type2=="None":
+        morethan1type="No"
+    else:
+        morethan1type="Yes"
     #pokemonInfo = pokemon.Pokemon(i) # very slow if activated
     nodesinfo.append({"id":i, "group":1, "img":pokemon_images.loc[i]['PNG'], 
-                      "type1":pokemon_images.loc[i]['Type 1'], "type2":pokemon_images.loc[i]['Type 2']})
+                      "type1":pokemon_images.loc[i]['Type 1'], "type2":type2, "morethan1type":morethan1type})
     if i in smogonData['data']:
         top = Counter(smogonData['data'][i]['Teammates']).most_common()[:1]
         construct_links(i, top, linksinfo)
