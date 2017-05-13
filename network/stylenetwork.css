@@ -1,0 +1,117 @@
+@font-face {
+    font-family: "PokemonGB";
+    src: url("PokemonGB.ttf") format('truetype');
+}
+
+
+#page_Description {
+    border-radius: 2px;
+    margin: 0px 0px 0px 2px;
+    padding: 10px 5px 5px 5px;
+    background-color: white;
+    border: 4px double;
+    font-size:12px;
+    color: black;
+    font-family: "PokemonGB";
+    width: 500px;
+    height: 150px;
+}
+
+#TITLE {
+    background-color: black;
+    color: white;
+    padding: 5px;
+    font-size: 18px;
+    font-family: Futura;
+    font-style: italic;
+}
+
+
+.Rainbow {
+    width: 88px;
+    height: 5px;
+}
+
+/*Pokemon Type colors */
+.Fire{
+    fill: #F08030;
+    background-color: #F08030;
+}
+
+.Water{
+    fill: #6890F0;
+    background-color: #6890F0;
+}
+
+.Grass{
+    fill: #78C850;
+    background-color: #78C850;
+}
+
+.Bug{
+    fill: #A8B820;
+    background-color: #A8B820;
+}
+
+.Normal{
+    fill: #A8A878;
+    background-color: #A8A878;
+}
+
+.Poison{
+    fill: #A040A0;
+    background-color: #A040A0;    
+}
+
+.Electric{
+    fill: #F8D030;
+    background-color: #F8D030;
+}
+
+.Ground{
+    fill: #E0C068;
+    background-color: #E0C068;
+}
+
+.Fighting{
+    fill: #C03028;
+    background-color: #C03028;
+}
+
+.Psychic{
+    fill: #F85888;
+    background-color: #F85888;
+}
+
+.Rock{
+    fill: #B8A038;
+    background-color: #B8A038;
+}
+
+.Ghost{
+    fill: #705898;
+    background-color: #705898;
+}
+
+.Ice{
+    fill: #98D8D8;
+    background-color: #98D8D8;
+}
+
+.Dragon{
+    fill: #7038F8;
+    background-color: #7038F8;
+}
+
+.Flying{
+    fill: #A890F0;
+    background-color: #A890F0;
+}
+
+
+#myDD{
+    display: inline-block;
+    margin: 5px 0px 0px 5px;
+    width: 123px;
+    border-radius: 5px;
+}
