@@ -74,7 +74,7 @@ path.link {
 <!--//selection box-->
     
      <table>
-        <tr height=100px>
+        <tr height=50px>
                 <div id="one_Poke">
                     <span id="selText">Select Pokemon:  </span>
                     <select id="myDD">test</select>
@@ -83,14 +83,31 @@ path.link {
     </table>
                         
          <table>
-        <tr height=100px>
+        <tr height=50px>
                 <div id="one_Poke">
                     <span id="selText">Select Type:  </span>
-                    <select id="myDD">test</select>
+                    <select id="myDD2">test</select>
                     <div class="chart-wrap">
                         <table style="width:225px; text-align: right">
     </table>
+                        
+
+<!--
+         <table>
+        <tr height=100px>
+                <div id="one_Poke">
+                    <span id="selText">Select Pokemon with more than 1 type:  </span>
+                    <select id="myDD3">test</select>
+                    <div class="chart-wrap">
+                        <table style="width:225px; text-align: right">
+    </table>
+-->
     
+    <td>
+
+        <div id="2types" class='twotypes'>Two types</div>
+        <div class="chart-wrap">
+    </td>    
     
 <!--<script src="https://d3js.org/d3.v3.min.js"></script>-->
 <script>
@@ -136,12 +153,54 @@ function createDD(dat){
     .data(dat.sort(function(a,b) {return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);} ))
     .enter()
     .append("option")
-    .attr("value", function(d) {return parseInt(d.id);})
+    .attr("value", function(d) {return d.id;})
     .text(function(d) {
         return d.id; 
     });
     return 0;
 }
+    
+//create drop-down list to pick type of pokemon    
+    
+function createDD2(dat){ 
+    
+  var nest = d3.nest()
+  .key(function(d) { return d.type1;})
+  .entries(dat);
+    
+    d3.select("#myDD2")
+    .selectAll("option")
+    .data(nest.sort(function(a,b) {return (a.type1 > b.type1) ? 1 : ((b.type1 > a.type1) ? -1 : 0);} ))
+    .enter()
+    .append("option")
+    .attr("value", function(d) {return d.key;})
+    .text(function(d) {
+        return d.key; 
+    });
+    return 0;
+}
+    
+//create drop-down list to pick pokemon with more than 1 type 
+    
+function createDD3(dat){
+    
+  var nest = d3.nest()
+  .key(function(d) { return d.morethan1type;})
+  .entries(dat);
+
+    
+    d3.select("#myDD3")
+    .selectAll("option")
+    .data(nest.sort(function(a,b) {return (a.morethan1type > b.morethan1type) ? 1 : ((b.morethan1type > a.morethan1type) ? -1 : 0);} ))
+    .enter()
+    .append("option")
+    .attr("value", function(d) {return d.key;})
+    .text(function(d) {
+        return d.key; 
+    });
+    return 0;
+}
+     
     
 //    d3.selection.prototype.moveToFront = function() {  
 //      return this.each(function(){
@@ -162,6 +221,8 @@ d3.json("https://gist.githubusercontent.com/chosun41/a6b49548df20b6d25f94152bf4b
     
 //fill selection box
     createDD(json.nodes)
+    createDD2(json.nodes)
+    createDD3(json.nodes)
 
   var edges = [];
     json.links.forEach(function(e) {

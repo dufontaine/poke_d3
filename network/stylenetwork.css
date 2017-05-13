@@ -120,12 +120,32 @@
     display: inline-block;
     margin: 5px 0px 0px 5px;
     width: 123px;
-    border-radius: 7px;
+    border-radius: 5px;
 }
 
+/*
 #myDD3{
     display: inline-block;
     margin: 5px 0px 0px 5px;
     width: 123px;
     border-radius: 7px;
+}
+*/
+
+.twotypes{
+  border-radius: 10px; 
+  display: block;
+  color: rgb(255, 255, 255);
+  font-family: Arial;
+  font-size: 16px;
+  padding: 5px 5px 5px 5px;
+  text-decoration: none;
+  text-shadow: rgb(47, 102, 39) 0px 1px 0px;
+  margin: 0px 5px 5px 5px;
+  background-color: rgb(168, 168, 168);
+  text-align: top;
+  border: 1px solid black;
+  margin: 0px 5px 0px 15px;
+  width: 110px;
+  display: inline-block;
 }
