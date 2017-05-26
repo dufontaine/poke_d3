@@ -123,6 +123,16 @@
     border-radius: 5px;
 }
 
+.Black {
+    fill: "black";
+    background-color: "black";
+}
+
+.Grey {
+    fill: "grey";
+    background-color: "grey";
+}
+
 /*
 #myDD3{
     display: inline-block;
@@ -144,8 +154,7 @@
   margin: 0px 5px 5px 5px;
   background-color: rgb(168, 168, 168);
   text-align: top;
-  border: 1px solid black;
-  margin: 0px 5px 0px 15px;
-  width: 110px;
+  border: 0px solid black;
+  width: 80px;
   display: inline-block;
 }

@@ -32,7 +32,7 @@ path.link {
 <body>
 
 <!--// top border-->
-   <table style='border-collapse: collapse;' width=1335px> 
+   <table style='border-collapse: collapse;' width=1500px> 
         <tr>
             <td colspan=15 id='TITLE'>POKE-VIZ:  NETWORK ANALYZER </td>
         </tr>
@@ -55,11 +55,12 @@ path.link {
             <td  class="Dragon Rainbow"></td>
         </tr>
     </table>
-    <div height='6px;' style='font-size:6px;'>&nbsp;</div>
     
-<!--    //dialog box-->
-        <tr>
-            <td rowspan="3" style="vertical-align:text-bottom">
+    <div height='6px;' style='font-size:6px;'>&nbsp;</div>
+
+<!--// dialog box-->
+   <table style="float: left;">
+            <td id="dialog_box" rowspan="2"> 
                 <div id="page_Description">
                     My my, You have so many Pokemon to choose from! <br><br>
                     From the right you can select individual Pokemon to read
@@ -68,46 +69,32 @@ path.link {
                     with more than one type to help build your team. <br><br>
                     -Professor Oak
                 </div>
+            </td>  
+    </table>
+    
+<!--// buttons/filters-->
+    <table style="float: left", cellpadding="20">
+        <tr>
+            <td> 
+                    <div id="sel_poke">Select Pokemon:
+                        <select id="myDD">test</select>
+                    </div>
             </td>
         </tr>
-    
-<!--//selection box-->
-    
-     <table>
-        <tr height=50px>
-                <div id="one_Poke">
-                    <span id="selText">Select Pokemon:  </span>
-                    <select id="myDD">test</select>
-                    <div class="chart-wrap">
-                        <table style="width:225px; text-align: right">
+        <tr>
+            <td>                
+                    <div id="sel_type">Select Type:    
+                        <select id="myDD2">test</select>
+                    </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="2types", class='twotypes'>Two Types</div>
+            </td> 
+        </tr>
     </table>
-                        
-         <table>
-        <tr height=50px>
-                <div id="one_Poke">
-                    <span id="selText">Select Type:  </span>
-                    <select id="myDD2">test</select>
-                    <div class="chart-wrap">
-                        <table style="width:225px; text-align: right">
-    </table>
-                        
 
-<!--
-         <table>
-        <tr height=100px>
-                <div id="one_Poke">
-                    <span id="selText">Select Pokemon with more than 1 type:  </span>
-                    <select id="myDD3">test</select>
-                    <div class="chart-wrap">
-                        <table style="width:225px; text-align: right">
-    </table>
--->
-    
-    <td>
-
-        <div id="2types" class='twotypes'>Two Types</div>
-        <div class="chart-wrap">
-    </td>    
     
 <!--<script src="https://d3js.org/d3.v3.min.js"></script>-->
 <script>
@@ -116,9 +103,9 @@ var tcBlack = "#130C0E";
 var x_browser = 20,
     y_browser = 25;
     
-var width = 1200,
-    height = 1200,
-    radius = 6;
+var width = 1400,
+    height = 1000,
+    radius = 40;
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -202,19 +189,19 @@ function createDD2(dat){
 //}
      
     
-//    d3.selection.prototype.moveToFront = function() {  
-//      return this.each(function(){
-//        this.parentNode.appendChild(this);
-//      });
-//    };
-//    d3.selection.prototype.moveToBack = function() {  
-//        return this.each(function() { 
-//            var firstChild = this.parentNode.firstChild; 
-//            if (firstChild) { 
-//                this.parentNode.insertBefore(this, firstChild); 
-//            } 
-//        });
-//    };
+/*    d3.selection.prototype.moveToFront = function() {  
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    };
+    d3.selection.prototype.moveToBack = function() {  
+        return this.each(function() { 
+            var firstChild = this.parentNode.firstChild; 
+            if (firstChild) { 
+                this.parentNode.insertBefore(this, firstChild); 
+            } 
+        });
+    };*/
 
 d3.json("https://gist.githubusercontent.com/chosun41/a6b49548df20b6d25f94152bf4b9eda3/raw/8c9a373de0430e3e37e1257cd7b3722f914d00cc/pokemon.json", function(error, json) {
   if (error) throw error;
@@ -259,18 +246,29 @@ d3.json("https://gist.githubusercontent.com/chosun41/a6b49548df20b6d25f94152bf4b
       .attr("class", "node")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .call(force.drag);
- 
+
   // Append a circle
-  nodeEnter.append("svg:circle")
+  var circles= nodeEnter.append("svg:circle")
+      .attr("id", "circles")
       .attr("r", function(d) { return 20; })
- 
+/*      .attr('class', 'click-capture')
+      .style('visibility', 'hidden')*/
+      .text(function(d) {return d.type1 + ' ' + d.type2;});
+    
+  //tooltip for ids
+  var title=  nodeEnter.append("svg:title")
+    .attr("id", "title")
+    .text(function(d) {return d.id;});
+    
   // Append images
   var images = nodeEnter.append("svg:image")
+        .attr("id", "images")
         .attr("xlink:href",  function(d) { return d.img;})
         .attr("x", function(d) { return -25;})
         .attr("y", function(d) { return -25;})
         .attr("height", 50)
         .attr("width", 50);
+    
   
     // make the image grow a little on mouse over and add the text details on click
   var setEvents = images
@@ -291,18 +289,37 @@ d3.json("https://gist.githubusercontent.com/chosun41/a6b49548df20b6d25f94152bf4b
               .attr("x", function(d) { return -25;})
               .attr("y", function(d) { return -25;})
               .attr("height", 50)
-              .attr("width", 50);
+              .attr("width", 50)
           });
 
+//function to select type of pokemon and color change
 
- /*nodeEnter.append("text")
-      .attr("class", "nodetext")
-      .attr("x", x_browser)
-      .attr("y", y_browser +15)
-      .attr("fill", tcBlack)
-      .text(function(d) { return d.id; });
+    //function to select type of pokemon and color change
+ d3.select('#myDD2').on('change', function(){
+        //get type selected
+        var seltype = d3.select("#myDD2").node().value
+        
+        //reset all circle colors to black
+        nodeEnter.each(function(d, i){
+                var thisnode2=d3.select(this);
+                thisnode2.attr("class","Black");
+                thisnode2.transition().style("opacity", 1);
+        })
 
-node.exit().remove();*/
+        // if the node type matches switch color else turn grey
+        nodeEnter.each(function(d, i){
+            var thisnode=d3.select(this);
+            var nodetype = thisnode.text();
+            var tokens =nodetype.split(" ");
+            if(tokens[0]==seltype || tokens[1]==seltype){
+                thisnode.attr("class", seltype);
+            }
+            else{
+                thisnode.transition().style("opacity", 0.05);
+            }
+        })
+ });
+    
 
   force.on("tick", function() {
     node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
