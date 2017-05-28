@@ -33,8 +33,19 @@ V(df.g)$color <- graph.com$membership + 1
 plot(df.g, layout=layout)
 
 # weights automatically factored into centrality
-degree(df.g, mode=c("in"))
-degree(df.g, mode=c("out"))
-betweenness(df.g, directed=TRUE)
-clusters(df.g)
+din<-degree(df.g, mode=c("in"))
+dout<-degree(df.g, mode=c("out"))
+bt<-betweenness(df.g, directed=TRUE)
+# clusters(df.g)
 
+#page rank, need to change weight to not be inverse
+df.g2 <- graph.data.frame(d = edgesdf, directed = TRUE)
+# convert costs to strength by taking 1/value so higher cond prob is lower cost
+E(df.g2)$weight=as.numeric(built.graph$links$value)
+pgr=page.rank(df.g2)$vector
+
+finaldf<-cbind(din, dout, bt, pgr)
+finaldf<-data.frame(finaldf)
+finaldf$id<-row.names(finaldf)
+finaldf
+write.csv(finaldf, "centrality.csv", row.names=FALSE)
