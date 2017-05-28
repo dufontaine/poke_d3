@@ -22,7 +22,7 @@ def construct_links(source, top, finallist, prx, rawcount):
     for i in range(len(top)):
         if (top[i][0] != "empty"):
             finallist.append({"source":source, "target":top[i][0], 
-                              "value":round(top[i][1]/rawcount + prx,2)})
+                              "value":round(top[i][1]/rawcount + prx,4)})
     
 #%%
 
