@@ -16,14 +16,18 @@ import requests
 
 #%%
 #Funtions
-def construct_links(source, top, finallist):
+# final list just tells us what list to append link to
+def construct_links(source, top, finallist, prx, rawcount):
     'Construct the top links for each source pokemon.'
     for i in range(len(top)):
-        finallist.append({"source":source, "target":top[i][0], "value":int(top[i][1])})
+        if (top[i][0] != "empty"):
+            finallist.append({"source":source, "target":top[i][0], 
+                              "value":round(top[i][1]/rawcount + prx,2)})
     
 #%%
 
 # Read all First Generation Pokemons
+# just contains name of pokemon up to 149 pokemon
 url="https://raw.githubusercontent.com/veekun/pokedex/master/pokedex/data/csv/pokemon.csv"
 s=requests.get(url).content
 pokemon_names = pd.read_csv(io.StringIO(s.decode('utf-8'))).iloc[:149].identifier
@@ -36,12 +40,14 @@ pokemon_names[pokemon_names=="Farfetchd"]="Farfetch'd"
 pokemon_names[pokemon_names=="Mr-mime"]="Mr. Mime"
 pokemon_names=pokemon_names.drop(['Tentacool', 'Doduo', 'Grimer'])
 pokemon_names[pokemon_names==""]=""
+# after dropping 3 pokemon we have 146
+
 
 # Read document from smogon
 with urllib.request.urlopen("http://www.smogon.com/stats/2017-02/chaos/gen1ou-0.json") as url:
     smogonData = json.loads(url.read().decode())
 
-# Read file with images
+# has type and images indexed by pokemon
 pokemon_images= pd.read_csv('https://gist.githubusercontent.com/santiagoolivar2017/0591a53c4dd34ecd8488660c7372b0e3/raw/4be104b8bc8876acd15f8e21f1c5945f10e3aa1e/Pokemon-description-image.csv')
 pokemon_images.index = pokemon_images['Pokemon']
 
@@ -60,23 +66,29 @@ for i in pokemon_names:
     type2=pokemon_images.loc[i]['Type 2']
     if is_nan(type2):
         type2="None"
-    morethan1type=""
-    if type2=="None":
-        morethan1type="No"
-    else:
-        morethan1type="Yes"
     #pokemonInfo = pokemon.Pokemon(i) # very slow if activated
-    nodesinfo.append({"id":i, "group":1, "img":pokemon_images.loc[i]['PNG'], 
-                      "type1":pokemon_images.loc[i]['Type 1'], "type2":type2, "morethan1type":morethan1type})
+
     if i in smogonData['data']:
+        nodesinfo.append({"id":i,"img":pokemon_images.loc[i]['PNG'], 
+        "type1":pokemon_images.loc[i]['Type 1'], "type2":type2,
+        "gxe95": smogonData['data'][i]['Viability Ceiling'][3]})
+        rawcount=smogonData['data'][i]['Raw count']
+#        print(rawcount)
         top = Counter(smogonData['data'][i]['Teammates']).most_common()[:1]
-        construct_links(i, top, linksinfo)
+#        print(top)
+        prx=""
+        if (top[0][0]!='Venonat'):
+            prx=smogonData['data'][top[0][0]]["usage"]
+        else:
+            top = Counter(smogonData['data'][i]['Teammates']).most_common()[1:2]
+            prx=smogonData['data'][top[0][0]]["usage"]
+        construct_links(i, top, linksinfo, prx, rawcount)
 
 dictionary["nodes"] = nodesinfo
 dictionary["links"] = linksinfo
 
 #%%
 # Save file
-with open('pokemon.json', 'w') as outfile:
+with open('pokemon2.json', 'w') as outfile:
     json.dump(dictionary, outfile)
     
