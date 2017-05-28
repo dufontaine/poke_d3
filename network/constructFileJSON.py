@@ -20,8 +20,8 @@ import requests
 
 def construct_links(source, top, finallist):
     'Construct the top links for each source pokemon.'
-    for i in range(len(top)):
-        finallist.append({"source":source, "target":top[i][0], "value":int(top[i][1])})
+    for j in range(len(top)):
+        finallist.append({"source":source, "target":top[j][0], "value":float(top[j][1])})
 
 
 # # Read all First Generation Pokemons
@@ -58,7 +58,8 @@ with urllib.request.urlopen("http://www.smogon.com/stats/2017-02/chaos/gen1ou-0.
 
 pokemon_characteristics= pd.read_csv('https://gist.githubusercontent.com/santiagoolivar2017/0591a53c4dd34ecd8488660c7372b0e3/raw/4be104b8bc8876acd15f8e21f1c5945f10e3aa1e/Pokemon-description-image.csv')
 pokemon_characteristics.index = pokemon_characteristics['Pokemon']
-pokemon_characteristics.head(2)
+pokemon_characteristics['Type 2'].fillna(value='None', inplace=True)
+pokemon_characteristics.head(3)
 
 
 # # Building Dictionary
@@ -74,18 +75,21 @@ for i in pokemon_names:
     if i not in smogonData['data']:
         nodesinfo.append({"id":i,
                       "img":pokemon_characteristics.loc[i]['PNG'],
-                      "group": pokemon_characteristics.loc[i]['Type 1'],
+                      "Type 1": pokemon_characteristics.loc[i]['Type 1'],
+                      "Type 2": pokemon_characteristics.loc[i]['Type 2'],
                       "usage": 0,
                       "gxeMax": 0,
                       "gxe95": 0})
     if i in smogonData['data']:
         nodesinfo.append({"id":i, 
                       "img":pokemon_characteristics.loc[i]['PNG'],
-                      "group": pokemon_characteristics.loc[i]['Type 1'],
+                      "Type 1": pokemon_characteristics.loc[i]['Type 1'],
+                      "Type 2": pokemon_characteristics.loc[i]['Type 2'],
                       "usage": smogonData['data'][i]['Viability Ceiling'][0],
                       "gxeMax": smogonData['data'][i]['Viability Ceiling'][1],
                       "gxe95": smogonData['data'][i]['Viability Ceiling'][3]})
         top = Counter(smogonData['data'][i]['Teammates']).most_common()[:1]
+        top = [(top[0][0], top[0][1]/smogonData['data'][i]['Raw count'])]
         construct_links(i, top, linksinfo)
 
 dictionary["nodes"] = nodesinfo
