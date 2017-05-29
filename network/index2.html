@@ -63,8 +63,8 @@ path.link {
             <td id="dialog_box" rowspan="2"> 
                 <div id="page_Description">
                     My my, You have so many Pokemon to choose from! <br><br>
-                    From the right, you can select individual Pokemon to read up on them. <br><br>
-                    You can also filter by types of Pokemon to see if there are any interesting patterns. <br><br>
+                    From the right, you have a number of tools to analyze the Pokemon network. <br><br>
+                    You can filter by Pokemon, types, and size by network attributes. <br><br>
                     Good luck on building your team of Pokemon! <br><br>
                     -Professor Oak
                 </div>
@@ -79,54 +79,59 @@ path.link {
     </table>
     
 <!-- buttons and filters-->
-    <table style="float: left;margin-right:50px", cellpadding="20">
-        <tr>
+
+    
+<!--text of pokemon and type stats-->
+    
+<!--individual pokemon stats-->   
+<table style="float: left;margin-right:20px", cellpadding="22">
             <td> 
                     <div id="sel_poke">Select Pokemon:
                         <select id="myDD">test</select>
                     </div>
+                    <div id="poketype1">Type 1: </div>
+                    <div id="poketype2">Type 2: </div>
+                    <div id="usage"> Usage: </div>
+                    <div id="pokedgr"> In Degree: </div>
+                    <div id="pokebt">Between Centrality: </div>
+                    <div id="pokepgr">Page Rank Prob.: </div>
+                    <div id="vblty"> Viability: </div>
             </td>
-        </tr>
-        <tr>
-            <td>                
+</table>
+
+<!--type pokemon stats-->   
+<table style="float: left;margin-right:20px", cellpadding="17">
+            <td> 
                     <div id="sel_type">Select Type:    
                         <select id="myDD2">test</select>
                     </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div id="Reset", class='Reset'>Reset</div>
-            </td> 
-        </tr>
-    </table>
-    
-<!--text of pokemon and type stats-->
-<!--individual pokemon stats-->
-    
-<table style="float: left;margin-right:130px", cellpadding="17">
-            <td> 
-                    <div id="pokename">Name:       </div>
-                    <div id="poketype1">Type 1:       </div>
-                    <div id="poketype2">Type 2:       </div>
-                    <div id="pokedgr">Degree Centrality:       </div>
-                    <div id="pokebt">Between Centrality:       </div>
-                    <div id="pokeclose">Closeness Centrality:       </div>
+                    <div id="type">Type: </div>
+                    <div id="count">Count: </div>
             </td>
 </table>
     
-<!-- display:none-->
-<!--pokemon type stats -->
-<!--document.getElementById("type").innerHTML = "Bug";-->
-
-<table style="float: left", cellpadding="17">
-            <td>                
-                    <div id="type">Type:         </div>
-                    <div id="count">Count:         </div>
+<table style="float: left;margin-right:20px", cellpadding="17">
+            <td> 
+                    <div id="sel_cent">Size By:    
+                        <select id="myDD3">test</select>
+                    </div>
+                    <div id="maxcent">Max: </div>
+                    <div id="mincent">Min: </div>
+                    <div id="top1">Rank 1: </div>
+                    <div id="top2">Rank 2: </div>
+                    <div id="top3">Rank 3: </div>
+                    <div id="top4">Rank 4: </div>
+                    <div id="top5">Rank 5: </div>
+                    <div id="top6">Rank 6: </div>
             </td>
- </table>
-
-
+</table>
+    
+<table style="float: left;margin-right:20px", cellpadding="17">
+            <td> 
+                <div id="Reset", class='Reset'>Reset</div>
+            </td>
+</table>
+    
     
 <!--script-->
 <script>
@@ -216,26 +221,27 @@ function createDD2(dat){
     return 0;
 }
     
-//create drop-down list to pick pokemon with more than 1 type 
+//create drop-down list to size nodes by centrality measure
     
-//function createDD3(dat){
-//    
-//  var nest = d3.nest()
-//  .key(function(d) { return d.morethan1type;})
-//  .entries(dat);
-//
-//    
-//    d3.select("#myDD3")
-//    .selectAll("option")
-//    .data(nest.sort(function(a,b) {return (a.morethan1type > b.morethan1type) ? 1 : ((b.morethan1type > a.morethan1type) ? -1 : 0);} ))
-//    .enter()
-//    .append("option")
-//    .attr("value", function(d) {return d.key;})
-//    .text(function(d) {
-//        return d.key; 
-//    });
-//    return 0;
-//}
+function createDD3(){
+    
+  var sizeby=['Usage','In Degree','Between Centrality','Page Rank Prob.','Viability']
+    
+  var nest = d3.nest()
+  .key(function(d) { return d;}).sortKeys(d3.ascending)
+  .entries(sizeby);
+    
+    d3.select("#myDD3")
+    .selectAll("option")
+    .data(nest)
+    .enter()
+    .append("option")
+    .attr("value", function(d) {return d.key;})
+    .text(function(d) {
+        return d.key; 
+    });
+    return 0;
+}
      
     
 /*    d3.selection.prototype.moveToFront = function() {  
@@ -252,13 +258,13 @@ function createDD2(dat){
         });
     };*/
 
-d3.json("https://gist.githubusercontent.com/chosun41/1ba24661715586027d4b21415a71dfba/raw/b1555733cb798c5c9089be6d20b92703a6aafcbd/pokemon2.json", function(error, json) {
+d3.json("https://gist.githubusercontent.com/chosun41/8fb833faa458375657fa110126be2527/raw/162eabacb80394e699ee9d451334845bdbc1ed84/pokemon2.json", function(error, json) {
   if (error) throw error;
     
 //fill selection box
     createDD(json.nodes)
     createDD2(json.nodes)
-//    createDD3(json.nodes)
+    createDD3()
 
   var edges = [];
     json.links.forEach(function(e) {
@@ -394,7 +400,6 @@ d3.json("https://gist.githubusercontent.com/chosun41/1ba24661715586027d4b21415a7
  d3.select('#myDD').on('change', function(){
         //get type selected
         var selpoke = d3.select("#myDD").node().value
-        document.getElementById("pokename").innerHTML = 'Name: ' + selpoke;
      
         //get the array of the node matching the pokemon
         var varname=json.nodes.filter(function (a) {
@@ -402,6 +407,11 @@ d3.json("https://gist.githubusercontent.com/chosun41/1ba24661715586027d4b21415a7
             })[0];
         document.getElementById("poketype1").innerHTML = 'Type 1: ' + varname.type1;
         document.getElementById("poketype2").innerHTML = 'Type 2: ' + varname.type2;
+        document.getElementById("usage").innerHTML = 'Usage: ' + (varname.usage*100).toFixed(2) + "%";
+        document.getElementById("pokedgr").innerHTML = 'In Degree: ' + varname.din;
+        document.getElementById("pokebt").innerHTML = 'Between Centrality: ' + varname.bt;
+        document.getElementById("pokepgr").innerHTML = 'Page Rank Prob.: ' + (varname.pgr*100).toFixed(2) + "%";
+        document.getElementById("vblty").innerHTML = 'Viability: ' + varname.gxe95;
         
         //reset all circle colors to black and full opacity and reverse enlargements
         nodeEnter.each(function(d, i){
@@ -436,17 +446,151 @@ d3.json("https://gist.githubusercontent.com/chosun41/1ba24661715586027d4b21415a7
         })
  });
     
+//size by centrality measure   
+ d3.select('#myDD3').on('change', function(){
+        //get type selected
+        var selcent = d3.select("#myDD3").node().value
+        
+/*      //reset all circle colors to black and full opacity and reverse enlargements
+        nodeEnter.each(function(d, i){
+                var thisnode2=d3.select(this);
+                thisnode2.attr("class","Black");
+                thisnode2.transition().style("opacity", 1);
+                thisnode2.select('image')
+                .transition()
+                .attr("x", function(d) { return -25;})
+                .attr("y", function(d) { return -25;})
+                .attr("height", 50)
+                .attr("width", 50)
+        })*/
+
+        // sorted nodes by centrality measure
+        var descusage=json.nodes.sort(function(a,b) {return (a.usage < b.usage) ? 1 : ((b.usage < a.usage) ? -1 : 0);})
+/*        var ascusage=json.nodes.sort(function(a,b) {return (a.usage > b.usage) ? 1 : ((b.usage > a.usage) ? -1 : 0);})
+        var desind=json.nodes.sort(function(a,b) {return (a.ind < b.ind) ? 1 : ((b.ind < a.ind) ? -1 : 0);})
+        var ascind=json.nodes.sort(function(a,b) {return (a.ind > b.ind) ? 1 : ((b.ind > a.ind) ? -1 : 0);})
+        var descbt=json.nodes.sort(function(a,b) {return (a.bt < b.bt) ? 1 : ((b.bt < a.bt) ? -1 : 0);})
+        var ascbt=json.nodes.sort(function(a,b) {return (a.bt > b.bt) ? 1 : ((b.bt > a.bt) ? -1 : 0);})
+        var descpgr=json.nodes.sort(function(a,b) {return (a.pgr < b.pgr) ? 1 : ((b.pgr < a.pgr) ? -1 : 0);})
+        var ascpgr=json.nodes.sort(function(a,b) {return (a.pgr > b.pgr) ? 1 : ((b.pgr > a.pgr) ? -1 : 0);})
+        var descvblty=json.nodes.sort(function(a,b) {return (a.gxe95 < b.gxe95) ? 1 : ((b.gxe95 < a.gxe95) ? -1 : 0);})
+        var ascvblty=json.nodes.sort(function(a,b) {return (a.gxe95 > b.gxe95) ? 1 : ((b.gxe95 > a.gxe95) ? -1 : 0);})*/
+     
+        // for each node change the size first identifying pokemon from the node text and then conditional for each
+        //centrality measure
+        nodeEnter.each(function(d, i){
+            var thisnode=d3.select(this);
+            var nodetxt = thisnode.text();
+            var tokens =nodetxt.split(" ");
+            // return node matching the id from tokens[2]
+            var varname=json.nodes.filter(function (a) {
+            return (a.id == tokens[2]);
+            })[0];
+            
+            // size scaling is 50 + (200-50) and also (value-min)/(max-min) of centrality measure
+            // x y resize is half of that height and width value
+            if(selcent=='Usage'){
+                var min=0.0001478;
+                var max=0.5137931;
+                var diffmaxmin=max-min;
+                var diffvarmin=varname.usage-min;
+                var hw=50 + (200-50)*diffvarmin/diffmaxmin;
+                var xy=-hw/2;
+                thisnode.select('image')
+                .transition()
+                .attr("x", function(d) { return xy;})
+                .attr("y", function(d) { return xy;})
+                .attr("height", hw)
+                .attr("width", hw)
+                document.getElementById("maxcent").innerHTML = 'Max: ' + (descusage[0].usage*100).toFixed(2) + "% ("  + descusage[0].id + ")";
+/*                document.getElementById("mincent").innerHTML = 'Min: ' + ascusage[0].usage;*/
+                document.getElementById("top1").innerHTML = 'Rank 1: ' + descusage[0].id + " ("  + (descusage[0].usage*100).toFixed(2) + "%)";
+                document.getElementById("top2").innerHTML = 'Rank 2: ' + descusage[1].id + " ("  + (descusage[1].usage*100).toFixed(2) + "%)";;
+                document.getElementById("top3").innerHTML = 'Rank 3: ' + descusage[2].id + " ("  + (descusage[2].usage*100).toFixed(2) + "%)";;
+                document.getElementById("top4").innerHTML = 'Rank 4: ' + descusage[3].id + " ("  + (descusage[3].usage*100).toFixed(2) + "%)";;
+                document.getElementById("top5").innerHTML = 'Rank 5: ' + descusage[4].id + " ("  + (descusage[4].usage*100).toFixed(2) + "%)";;
+                document.getElementById("top6").innerHTML = 'Rank 6: ' + descusage[5].id + " ("  + (descusage[6].usage*100).toFixed(2) + "%)";;
+            }
+            else if(selcent=='In Degree'){
+                var min=0;
+                var max=18;
+                var diffmaxmin=max-min;
+                var diffvarmin=varname.din-min;
+                var hw=50 + (200-50)*diffvarmin/diffmaxmin;
+                var xy=-hw/2;
+                thisnode.select('image')
+                .transition()
+                .attr("x", function(d) { return xy;})
+                .attr("y", function(d) { return xy;})
+                .attr("height", hw)
+                .attr("width", hw)
+            }
+            else if(selcent=='Between Centrality'){
+                var min=0;
+                var max=71;
+                var diffmaxmin=max-min;
+                var diffvarmin=varname.bt-min;
+                var hw=50 + (200-50)*diffvarmin/diffmaxmin;
+                var xy=-hw/2;
+                thisnode.select('image')
+                .transition()
+                .attr("x", function(d) { return xy;})
+                .attr("y", function(d) { return xy;})
+                .attr("height", hw)
+                .attr("width", hw)
+            }
+            else if(selcent=='Page Rank Prob.'){
+                var min=0.00112;
+                var max=0.2261;
+                var diffmaxmin=max-min;
+                var diffvarmin=varname.pgr-min;
+                var hw=50 + (200-50)*diffvarmin/diffmaxmin;
+                var xy=-hw/2;
+                thisnode.select('image')
+                .transition()
+                .attr("x", function(d) { return xy;})
+                .attr("y", function(d) { return xy;})
+                .attr("height", hw)
+                .attr("width", hw)
+            }
+            else if(selcent=='Viability'){
+                var min=29;
+                var max=75;
+                var diffmaxmin=max-min;
+                var diffvarmin=varname.gxe95-min;
+                var hw=50 + (200-50)*diffvarmin/diffmaxmin;
+                var xy=-hw/2;
+                thisnode.select('image')
+                .transition()
+                .attr("x", function(d) { return xy;})
+                .attr("y", function(d) { return xy;})
+                .attr("height", hw)
+                .attr("width", hw)
+            }
+
+        })
+ });
+    
  d3.select('#Reset').on('click', function(){
         //get type selected
         var selpoke = d3.select("#myDD").node().value
-        document.getElementById("pokename").innerHTML = 'Name: ';
         document.getElementById("poketype1").innerHTML = 'Type 1: ';
         document.getElementById("poketype2").innerHTML = 'Type 2: ';
-        document.getElementById("pokedgr").innerHTML = 'Degree Centrality: ';
+        document.getElementById("pokedgr").innerHTML = 'In Degree: ';
         document.getElementById("pokebt").innerHTML = 'Between Centrality: ';
-        document.getElementById("pokeclose").innerHTML = 'Closeness Centrality: ';
+        document.getElementById("pokepgr").innerHTML = 'Page Rank Prob.: ';
         document.getElementById("type").innerHTML = 'Type: ';
         document.getElementById("count").innerHTML = 'Count: ';
+        document.getElementById("vblty").innerHTML = 'Viability: ';
+        document.getElementById("usage").innerHTML = 'Usage: ';
+        document.getElementById("maxcent").innerHTML = 'Max: ';
+        document.getElementById("mincent").innerHTML = 'Min: ';
+        document.getElementById("top1").innerHTML = 'Rank 1: ';
+        document.getElementById("top2").innerHTML = 'Rank 2: ';
+        document.getElementById("top3").innerHTML = 'Rank 3: ';
+        document.getElementById("top4").innerHTML = 'Rank 4: ';
+        document.getElementById("top5").innerHTML = 'Rank 5: ';
+        document.getElementById("top6").innerHTML = 'Rank 6: ';
         
         //reset all circle colors to black and full opacity
         nodeEnter.each(function(d, i){

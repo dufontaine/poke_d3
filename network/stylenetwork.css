@@ -108,21 +108,6 @@
     background-color: #A890F0;
 }
 
-
-#myDD{
-    display: inline-block;
-    margin: 0px 0px 0px 5px;
-    width: 123px;
-    border-radius: 5px;
-}
-
-#myDD2{
-    display: inline-block;
-    margin: 5px 0px 0px 5px;
-    width: 123px;
-    border-radius: 5px;
-}
-
 .Black {
     fill: "black";
     background-color: "black";
@@ -138,14 +123,27 @@
     background-color: "white";
 }
 
-/*
-#myDD3{
+#myDD{
+    display: inline-block;
+    margin: 0px 0px 0px 5px;
+    width: 123px;
+    border-radius: 5px;
+}
+
+#myDD2{
     display: inline-block;
     margin: 5px 0px 0px 5px;
     width: 123px;
-    border-radius: 7px;
+    border-radius: 5px;
 }
-*/
+
+
+#myDD3{
+    display: inline-block;
+    margin: 5px 0px 0px 5px;
+    width: 140px;
+    border-radius: 5px;
+}
 
 .Reset{
   border-radius: 10px; 
