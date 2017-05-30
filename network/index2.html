@@ -142,7 +142,7 @@ var x_browser = 20,
     
 var width = 1400,
     height = 1050,
-    radius = 60;
+    radius = 80;
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -168,7 +168,7 @@ svg.append("defs").selectAll("marker")
 var force = d3.layout.force()
     .gravity(0.05)
     .distance(100)
-    .charge(-150)
+    .charge(-125)
     .size([width, height]);
     
 
