@@ -61,6 +61,7 @@ def is_nan(x):
 dictionary={"nodes":[], "links":[]}
 nodesinfo=[]
 linksinfo=[]
+
 ind=0
 for i in pokemon_names:
     type2=pokemon_images.loc[i]['Type 2']

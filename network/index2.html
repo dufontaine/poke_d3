@@ -32,9 +32,10 @@ path.link {
 <body>
 
 <!--// top border-->
-   <table style='border-collapse: collapse;' width=1500px> 
+   <table style='border-collapse: collapse;' width=1355px> 
         <tr>
-            <td colspan=15 id='TITLE'>POKE-VIZ:  NETWORK ANALYZER </td>
+            <td colspan=12 id='TITLE'>POKE-VIZ:  NETWORK ANALYZER </td>
+            <td colspan=4 id='TITLE'> <a href="https://dufontaine.github.io/poke_d3/" style="color: #A890F0; text-decoration: none;">GO TO TEAM BUILDER</a></td>
         </tr>
     
             <tr>
@@ -60,7 +61,7 @@ path.link {
 
 <!--dialog box-->
    <table style="float: left;">
-            <td id="dialog_box" rowspan="2"> 
+            <td id="dialog_box"> 
                 <div id="page_Description">
                     My my, You have so many Pokemon to choose from! <br><br>
                     From the right, you have a number of tools to analyze the Pokemon network. <br><br>
@@ -73,7 +74,7 @@ path.link {
     
 <!-- pr oak-->
     <table style="float: left;">
-            <td id="proak" rowspan="2"> 
+            <td id="proak"> 
                     <img src="proak.png" style="width:160px;height:250px;margin:15px 20px 0px 10px">
             </td>  
     </table>
@@ -83,9 +84,11 @@ path.link {
 <!--text of pokemon and type stats-->
     
 <!--individual pokemon stats-->   
-<table style="float: left;margin-right:20px", cellpadding="22">
+<table style="float: left;margin-right:3px;font-family: Arial", cellpadding="22">
+    <tr>
             <td> 
-                    <div id="sel_poke">Select Pokemon:
+            
+                    <div id="sel_poke"  > Select Pokemon:
                         <select id="myDD">test</select>
                     </div>
                     <div id="poketype1">Type 1: </div>
@@ -96,23 +99,28 @@ path.link {
                     <div id="pokepgr">Page Rank Prob.: </div>
                     <div id="vblty"> Viability: </div>
             </td>
+    </tr>
+    <tr>
+            <td> 
+                <div id="Reset", class='Reset'>Reset</div>
+            </td>
+    </tr>
 </table>
 
 <!--type pokemon stats-->   
-<table style="float: left;margin-right:20px", cellpadding="17">
+<table style="float: left;margin-right:3px;font-family: Arial", cellpadding="22">
             <td> 
-                    <div id="sel_type">Select Type:    
+                    <div id="sel_type"> Select Type: 
                         <select id="myDD2">test</select>
                     </div>
-                    <div id="type">Type: </div>
                     <div id="count">Count: </div>
             </td>
 </table>
 
 <!--centrality stats-->    
-<table style="float: left;margin-right:20px", cellpadding="17">
+<table style="float: left;margin-right:20px;font-family: Arial", cellpadding="21">
             <td> 
-                    <div id="sel_cent">Size By:    
+                    <div id="sel_cent"> Size By:
                         <select id="myDD3">test</select>
                     </div>
                     <div id="maxcent">Max: </div>
@@ -126,13 +134,6 @@ path.link {
             </td>
 </table>
     
-<table style="float: left;margin-right:20px", cellpadding="17">
-            <td> 
-                <div id="Reset", class='Reset'>Reset</div>
-            </td>
-</table>
-    
-    
 <!--script-->
 <script>
 
@@ -140,7 +141,7 @@ var tcBlack = "#130C0E";
 var x_browser = 20,
     y_browser = 25;
     
-var width = 1400,
+var width = 1355,
     height = 1050,
     radius = 80;
 
@@ -308,7 +309,7 @@ d3.json("https://gist.githubusercontent.com/chosun41/0d316db79bb3b5f91249147173a
   var circles= nodeEnter.append("circle")
       .attr("id", "circles")
       .attr("r", function(d) { return 20; })
-/*    .attr('class', 'click-capture')
+/*      .attr('class', 'click-capture')
       .style('visibility', 'hidden')*/
       .text(function(d) {return d.type1 + ' ' + d.type2;});
     
@@ -328,7 +329,7 @@ d3.json("https://gist.githubusercontent.com/chosun41/0d316db79bb3b5f91249147173a
     
   
   // make the image grow a little on mouse over and add the text details on click
-  var setEvents = images
+/*  var setEvents = images
           // on mouse enter grow
           .on( 'mouseenter', function() {
             // select element in current context
@@ -347,7 +348,7 @@ d3.json("https://gist.githubusercontent.com/chosun41/0d316db79bb3b5f91249147173a
               .attr("y", function(d) { return -25;})
               .attr("height", 50)
               .attr("width", 50)
-          });
+          });*/
 
 //function to select type of pokemon and color change
     
@@ -374,7 +375,6 @@ d3.json("https://gist.githubusercontent.com/chosun41/0d316db79bb3b5f91249147173a
         })
      
         //generate text
-        document.getElementById("type").innerHTML = 'Type: ' + seltype;
         var count=0;
 
         // if the node type matches switch color else turn grey, special cases for one type and two type
@@ -458,11 +458,12 @@ d3.json("https://gist.githubusercontent.com/chosun41/0d316db79bb3b5f91249147173a
             }
         })
  });
-    
+        
 //size by centrality measure   
  d3.select('#myDD3').on('change', function(){
         //get type selected
         var selcent = d3.select("#myDD3").node().value;
+        crntcent=selcent;
         
       //reset all circle colors to black and full opacity and reverse enlargements
 /*        nodeEnter.each(function(d, i){
@@ -640,10 +641,10 @@ d3.json("https://gist.githubusercontent.com/chosun41/0d316db79bb3b5f91249147173a
                     document.getElementById("top6").innerHTML = 'Rank 6: ';
             }
             else if(selcent=='Viability'){
-                var min=ascvblty[0].gxe95;
-                var max=descvblty[0].gxe95;
+                var min=Math.pow(ascvblty[0].gxe95,3);
+                var max=Math.pow(descvblty[0].gxe95,3);
                 var diffmaxmin=max-min;
-                var diffvarmin=varname.gxe95-min;
+                var diffvarmin=Math.pow(varname.gxe95,3)-min;
                 var hw=50 + (200-50)*diffvarmin/diffmaxmin;
                 var xy=-hw/2;
                 thisnode.select('image')
@@ -681,7 +682,6 @@ d3.json("https://gist.githubusercontent.com/chosun41/0d316db79bb3b5f91249147173a
         document.getElementById("pokedgr").innerHTML = 'In Degree: ';
         document.getElementById("pokebt").innerHTML = 'Between Centrality: ';
         document.getElementById("pokepgr").innerHTML = 'Page Rank Prob.: ';
-        document.getElementById("type").innerHTML = 'Type: ';
         document.getElementById("count").innerHTML = 'Count: ';
         document.getElementById("vblty").innerHTML = 'Viability: ';
         document.getElementById("usage").innerHTML = 'Usage: ';
@@ -693,6 +693,8 @@ d3.json("https://gist.githubusercontent.com/chosun41/0d316db79bb3b5f91249147173a
         document.getElementById("top4").innerHTML = 'Rank 4: ';
         document.getElementById("top5").innerHTML = 'Rank 5: ';
         document.getElementById("top6").innerHTML = 'Rank 6: ';
+        crnttype="";
+        
         
         //reset all circle colors to black and full opacity
         nodeEnter.each(function(d, i){
