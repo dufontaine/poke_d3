@@ -150,6 +150,7 @@
 
 
 .Reset{
+  float: left;    
   border-radius: 10px; 
   color: rgb(255, 255, 255);
   font-family: Arial;
@@ -158,8 +159,21 @@
   text-decoration: none;
   text-shadow: rgb(47, 102, 39) 0px 1px 0px;
   background-color: rgb(168, 168, 168);
-  text-align: top;
   border: 0px solid black;
   width: 80px;
-  display: inline-block;
+  display: inline;
 }
+
+.numpoke{
+  float: left;
+
+  font-family: Arial;
+  font-size: 16px;
+  border: 0px solid black;
+  display: inline;
+}
+
+input[type=number]{
+    width: 40px;
+}
+
